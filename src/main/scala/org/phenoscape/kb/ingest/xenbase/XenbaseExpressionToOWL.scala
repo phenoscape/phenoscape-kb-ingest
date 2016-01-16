@@ -1,25 +1,21 @@
-package org.phenoscape.owl.mod.xenbase
+package org.phenoscape.kb.ingest.xenbase
 
-import java.io.File
 import scala.collection.JavaConversions._
 import scala.collection.Map
-import scala.collection.TraversableOnce.flattenTraversableOnce
 import scala.collection.mutable
 import scala.io.Source
+
 import org.apache.commons.lang3.StringUtils
-import org.phenoscape.scowl.OWL._
-import org.phenoscape.owl.OWLTask
 import org.phenoscape.owl.Vocab
 import org.phenoscape.owl.Vocab._
 import org.phenoscape.owl.util.OBOUtil
-import org.semanticweb.owlapi.model.IRI
+import org.phenoscape.owl.util.OntologyUtil
+import org.phenoscape.scowl.OWL._
+import org.semanticweb.owlapi.apibinding.OWLManager
 import org.semanticweb.owlapi.model.OWLAxiom
 import org.semanticweb.owlapi.model.OWLNamedIndividual
-import org.semanticweb.owlapi.model.OWLOntology
-import org.semanticweb.owlapi.apibinding.OWLManager
-import org.phenoscape.owl.util.OntologyUtil
 
-object XenbaseExpressionToOWL extends OWLTask {
+object XenbaseExpressionToOWL {
 
   val laevis = Individual(Vocab.XENOPUS_LAEVIS)
   val tropicalis = Individual(Vocab.XENOPUS_TROPICALIS)

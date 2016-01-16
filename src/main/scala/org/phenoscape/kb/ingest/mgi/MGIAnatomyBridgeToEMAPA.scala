@@ -1,18 +1,19 @@
-package org.phenoscape.owl.mod.mgi
+package org.phenoscape.kb.ingest.mgi
 
-import org.phenoscape.owl.OWLTask
-import scala.io.Source
+import java.io.File
+
 import scala.collection.JavaConversions._
-import org.semanticweb.owlapi.model.OWLOntology
+import scala.io.Source
+
+import org.apache.commons.lang3.StringUtils
+import org.phenoscape.owl.util.OBOUtil
+import org.phenoscape.scowl.OWL._
 import org.semanticweb.owlapi.apibinding.OWLManager
 import org.semanticweb.owlapi.model.IRI
 import org.semanticweb.owlapi.model.OWLAxiom
-import org.phenoscape.owl.util.OBOUtil
-import org.apache.commons.lang3.StringUtils
-import org.phenoscape.scowl.OWL._
-import java.io.File
+import org.semanticweb.owlapi.model.OWLOntology
 
-object MGIAnatomyBridgeToEMAPA extends OWLTask {
+object MGIAnatomyBridgeToEMAPA {
 
   val ontologyName = "http://purl.org/phenoscape/mgi/anatomy.owl"
   val manager = OWLManager.createOWLOntologyManager();

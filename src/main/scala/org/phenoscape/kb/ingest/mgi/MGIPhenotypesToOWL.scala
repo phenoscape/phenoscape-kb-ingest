@@ -1,10 +1,9 @@
-package org.phenoscape.owl.mod.mgi
+package org.phenoscape.kb.ingest.mgi
 
 import scala.collection.mutable
 import scala.io.Source
 
 import org.apache.commons.lang3.StringUtils
-import org.phenoscape.owl.OWLTask
 import org.phenoscape.owl.Vocab
 import org.phenoscape.owl.Vocab._
 import org.phenoscape.owl.util.OBOUtil
@@ -14,7 +13,7 @@ import org.semanticweb.owlapi.apibinding.OWLManager
 import org.semanticweb.owlapi.model.OWLAxiom
 import org.semanticweb.owlapi.model.OWLClass
 
-object MGIPhenotypesToOWL extends OWLTask {
+object MGIPhenotypesToOWL {
 
   val mouse = Individual(Vocab.MOUSE)
   val manager = OWLManager.createOWLOntologyManager()

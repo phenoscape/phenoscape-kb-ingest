@@ -1,17 +1,18 @@
-package org.phenoscape.owl.mod.mgi
+package org.phenoscape.kb.ingest.mgi
 
 import scala.collection.mutable
 import scala.io.Source
 
 import org.apache.commons.lang3.StringUtils
-import org.phenoscape.owl.OWLTask
 import org.phenoscape.owl.Vocab._
+import org.semanticweb.owlapi.apibinding.OWLManager
 import org.semanticweb.owlapi.model.IRI
 import org.semanticweb.owlapi.model.OWLAxiom
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary
 
-object MGIGeneticMarkersToOWL extends OWLTask {
+object MGIGeneticMarkersToOWL {
 
+  val factory = OWLManager.getOWLDataFactory
   val rdfsLabel = factory.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_LABEL.getIRI())
   val hasExactSynonym = factory.getOWLAnnotationProperty(HAS_EXACT_SYNONYM)
   val hasRelatedSynonym = factory.getOWLAnnotationProperty(HAS_RELATED_SYNONYM)

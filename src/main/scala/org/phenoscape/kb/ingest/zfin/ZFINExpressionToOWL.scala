@@ -1,25 +1,19 @@
-package org.phenoscape.owl.mod.zfin
+package org.phenoscape.kb.ingest.zfin
 
-import java.io.File
 import scala.collection.JavaConversions._
-import scala.collection.TraversableOnce.flattenTraversableOnce
 import scala.collection.mutable
 import scala.io.Source
-import org.apache.commons.lang3.StringUtils
-import org.phenoscape.scowl.OWL._
-import org.phenoscape.owl.OWLTask
-import org.phenoscape.owl.Vocab
-import org.phenoscape.owl.Vocab._
-import org.phenoscape.owl.util.OBOUtil
-import org.semanticweb.owlapi.model.AddImport
-import org.semanticweb.owlapi.model.IRI
-import org.semanticweb.owlapi.model.OWLAxiom
-import org.semanticweb.owlapi.model.OWLOntology
-import org.semanticweb.owlapi.apibinding.OWLManager
-import org.phenoscape.owl.util.OntologyUtil
-import org.phenoscape.owl.util.ExpressionUtil
 
-object ZFINExpressionToOWL extends OWLTask {
+import org.apache.commons.lang3.StringUtils
+import org.phenoscape.owl.Vocab._
+import org.phenoscape.owl.util.ExpressionUtil
+import org.phenoscape.owl.util.OBOUtil
+import org.phenoscape.owl.util.OntologyUtil
+import org.phenoscape.scowl.OWL._
+import org.semanticweb.owlapi.apibinding.OWLManager
+import org.semanticweb.owlapi.model.OWLAxiom
+
+object ZFINExpressionToOWL {
 
   val manager = OWLManager.createOWLOntologyManager()
 

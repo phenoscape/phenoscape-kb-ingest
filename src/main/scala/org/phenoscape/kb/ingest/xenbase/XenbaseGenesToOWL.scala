@@ -1,18 +1,18 @@
-package org.phenoscape.owl.mod.xenbase
+package org.phenoscape.kb.ingest.xenbase
 
 import scala.collection.mutable
 import scala.io.Source
 
 import org.apache.commons.lang3.StringUtils
-import org.phenoscape.owl.OWLTask
 import org.phenoscape.owl.Vocab._
 import org.semanticweb.owlapi.apibinding.OWLManager
 import org.semanticweb.owlapi.model.IRI
 import org.semanticweb.owlapi.model.OWLAxiom
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary
 
-object XenbaseGenesToOWL extends OWLTask {
+object XenbaseGenesToOWL {
 
+  val factory = OWLManager.getOWLDataFactory
   val manager = OWLManager.createOWLOntologyManager()
   val rdfsLabel = factory.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_LABEL.getIRI())
   val hasExactSynonym = factory.getOWLAnnotationProperty(HAS_EXACT_SYNONYM)

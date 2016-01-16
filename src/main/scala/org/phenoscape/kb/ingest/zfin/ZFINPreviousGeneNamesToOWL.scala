@@ -1,20 +1,18 @@
-package org.phenoscape.owl.mod.zfin
+package org.phenoscape.kb.ingest.zfin
 
-import org.semanticweb.owlapi.model.OWLAxiom
-import org.semanticweb.owlapi.model.OWLOntology
-import scala.io.Source
 import scala.collection.JavaConversions._
 import scala.collection.mutable
-import org.phenoscape.owl.OWLTask
-import org.semanticweb.owlapi.model.IRI
-import org.semanticweb.owlapi.vocab.OWLRDFVocabulary
-import org.phenoscape.owl.Vocab
-import java.io.File
+import scala.io.Source
+
 import org.apache.commons.lang3.StringUtils
+import org.phenoscape.owl.Vocab
 import org.semanticweb.owlapi.apibinding.OWLManager
+import org.semanticweb.owlapi.model.IRI
+import org.semanticweb.owlapi.model.OWLAxiom
 
-object ZFINPreviousGeneNamesToOWL extends OWLTask {
+object ZFINPreviousGeneNamesToOWL {
 
+  val factory = OWLManager.getOWLDataFactory
   val manager = OWLManager.createOWLOntologyManager()
   val hasRelatedSynonym = factory.getOWLAnnotationProperty(Vocab.HAS_RELATED_SYNONYM)
 

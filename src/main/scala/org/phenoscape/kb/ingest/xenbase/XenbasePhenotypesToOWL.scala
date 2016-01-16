@@ -1,10 +1,9 @@
-package org.phenoscape.owl.mod.xenbase
+package org.phenoscape.kb.ingest.xenbase
 
 import scala.collection.Map
 import scala.io.Source
 
 import org.apache.commons.lang3.StringUtils
-import org.phenoscape.owl.OWLTask
 import org.phenoscape.owl.Vocab
 import org.phenoscape.owl.Vocab._
 import org.phenoscape.owl.util.ExpressionUtil
@@ -15,7 +14,7 @@ import org.semanticweb.owlapi.apibinding.OWLManager
 import org.semanticweb.owlapi.model.OWLAxiom
 import org.semanticweb.owlapi.model.OWLNamedIndividual
 
-object XenbasePhenotypesToOWL extends OWLTask {
+object XenbasePhenotypesToOWL {
 
   val laevis = Individual(Vocab.XENOPUS_LAEVIS)
   val tropicalis = Individual(Vocab.XENOPUS_TROPICALIS)

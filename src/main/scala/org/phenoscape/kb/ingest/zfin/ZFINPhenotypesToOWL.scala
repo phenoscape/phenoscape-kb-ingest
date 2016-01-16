@@ -1,11 +1,11 @@
-package org.phenoscape.owl.mod.zfin
+package org.phenoscape.kb.ingest.zfin
 
 import scala.collection.JavaConversions._
 import scala.collection.mutable
 import scala.io.Source
 
 import org.apache.commons.lang3.StringUtils
-import org.phenoscape.owl.OWLTask
+import org.apache.log4j.Logger
 import org.phenoscape.owl.Vocab._
 import org.phenoscape.owl.util.ExpressionUtil
 import org.phenoscape.owl.util.OBOUtil
@@ -15,7 +15,7 @@ import org.semanticweb.owlapi.model.IRI
 import org.semanticweb.owlapi.model.OWLAxiom
 import org.semanticweb.owlapi.model.OWLClass
 
-object ZFINPhenotypesToOWL extends OWLTask {
+object ZFINPhenotypesToOWL {
 
   def convert(phenotypeData: Source): Set[OWLAxiom] = phenotypeData.getLines.flatMap(translate).toSet[OWLAxiom]
 
@@ -86,5 +86,7 @@ object ZFINPhenotypesToOWL extends OWLTask {
     axioms.add(phenotype Fact (dcSource, figure))
     return axioms.toSet
   }
+  
+  private lazy val logger = Logger.getLogger(this.getClass)
 
 }

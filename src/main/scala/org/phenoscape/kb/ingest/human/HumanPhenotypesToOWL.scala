@@ -1,21 +1,22 @@
-package org.phenoscape.owl.mod.human
+package org.phenoscape.kb.ingest.human
 
 import scala.collection.mutable
 import scala.io.Source
 
 import org.apache.commons.lang3.StringUtils
-import org.phenoscape.owl.OWLTask
 import org.phenoscape.owl.Vocab
 import org.phenoscape.owl.Vocab._
 import org.phenoscape.owl.util.OBOUtil
 import org.phenoscape.owl.util.OntologyUtil
 import org.phenoscape.scowl.OWL._
+import org.semanticweb.owlapi.apibinding.OWLManager
 import org.semanticweb.owlapi.model.IRI
 import org.semanticweb.owlapi.model.OWLAxiom
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary
 
-object HumanPhenotypesToOWL extends OWLTask {
+object HumanPhenotypesToOWL {
 
+  val factory = OWLManager.getOWLDataFactory
   val rdfsLabel = factory.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_LABEL.getIRI())
   val human = factory.getOWLNamedIndividual(Vocab.HUMAN)
 
@@ -38,7 +39,7 @@ object HumanPhenotypesToOWL extends OWLTask {
     axioms.add(factory.getOWLDeclarationAxiom(gene))
     axioms.add(phenotype Fact (associated_with_gene, gene))
     axioms.add(phenotype Fact (associated_with_taxon, human))
-    return axioms.toSet
+    axioms.toSet
   }
 
 }
