@@ -10,7 +10,6 @@ import org.phenoscape.owl.util.ExpressionUtil
 import org.phenoscape.owl.util.OBOUtil
 import org.phenoscape.owl.util.OntologyUtil
 import org.phenoscape.scowl.OWL._
-import org.semanticweb.owlapi.apibinding.OWLManager
 import org.semanticweb.owlapi.model.OWLAxiom
 import org.semanticweb.owlapi.model.OWLNamedIndividual
 
@@ -18,7 +17,6 @@ object XenbasePhenotypesToOWL {
 
   val laevis = Individual(Vocab.XENOPUS_LAEVIS)
   val tropicalis = Individual(Vocab.XENOPUS_TROPICALIS)
-  val manager = OWLManager.createOWLOntologyManager()
 
   def convertToAxioms(phenotypeData: Source): Set[OWLAxiom] = phenotypeData.getLines.drop(1).flatMap(translate).toSet
 

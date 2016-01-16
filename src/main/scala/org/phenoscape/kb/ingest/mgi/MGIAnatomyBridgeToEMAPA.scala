@@ -16,7 +16,7 @@ import org.semanticweb.owlapi.model.OWLOntology
 object MGIAnatomyBridgeToEMAPA {
 
   val ontologyName = "http://purl.org/phenoscape/mgi/anatomy.owl"
-  val manager = OWLManager.createOWLOntologyManager();
+  val manager = OWLManager.createOWLOntologyManager()
 
   def convert(mappings: Source): OWLOntology = {
     val axioms = mappings.getLines.map(translate(_)).flatten.toSet[OWLAxiom]
@@ -31,13 +31,6 @@ object MGIAnatomyBridgeToEMAPA {
       factory.getOWLDeclarationAxiom(mgiTerm),
       factory.getOWLDeclarationAxiom(emapaTerm),
       mgiTerm SubClassOf emapaTerm)
-  }
-
-  def main(args: Array[String]): Unit = {
-    val mappingFile = Source.fromFile(args(0), "utf-8")
-    val ontology = convert(mappingFile)
-    mappingFile.close()
-    manager.saveOntology(ontology, IRI.create(new File(args(1))))
   }
 
 }

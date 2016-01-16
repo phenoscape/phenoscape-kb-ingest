@@ -9,24 +9,23 @@ import org.phenoscape.owl.Vocab._
 import org.phenoscape.owl.util.OBOUtil
 import org.phenoscape.owl.util.OntologyUtil
 import org.phenoscape.scowl.OWL._
-import org.semanticweb.owlapi.apibinding.OWLManager
 import org.semanticweb.owlapi.model.OWLAxiom
 
 object MGIExpressionToOWL {
 
   val mouse = Individual(Vocab.MOUSE)
-  val manager = OWLManager.createOWLOntologyManager()
-  val rdfsLabel = factory.getRDFSLabel()
+  val rdfsLabel = factory.getRDFSLabel
 
   def convert(expressionData: Source): Set[OWLAxiom] =
-    expressionData.getLines.drop(1).flatMap(translate).toSet[OWLAxiom] + (mouse Annotation (rdfsLabel, factory.getOWLLiteral("Mus musculus")))
+    expressionData.getLines.drop(1).flatMap(translate).toSet[OWLAxiom] +
+      (mouse Annotation (rdfsLabel, factory.getOWLLiteral("Mus musculus")))
 
   def translate(expressionLine: String): Set[OWLAxiom] = {
     val items = expressionLine.split("\t", -1)
     if (StringUtils.stripToNull(items(5)) == "Absent") {
       Set.empty
     } else {
-      val axioms = mutable.Set[OWLAxiom]()
+      val axioms = mutable.Set.empty[OWLAxiom]
       val expression = OntologyUtil.nextIndividual()
       axioms.add(factory.getOWLDeclarationAxiom(expression))
       axioms.add(expression Type GeneExpression)

@@ -84,9 +84,9 @@ object ZFINPhenotypesToOWL {
     val figureID = StringUtils.stripToNull(items(24))
     val figure = Individual(OBOUtil.zfinIRI(figureID))
     axioms.add(phenotype Fact (dcSource, figure))
-    return axioms.toSet
+    axioms.toSet
   }
-  
+
   private lazy val logger = Logger.getLogger(this.getClass)
 
 }

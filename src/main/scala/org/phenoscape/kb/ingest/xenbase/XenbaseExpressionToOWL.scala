@@ -11,7 +11,6 @@ import org.phenoscape.owl.Vocab._
 import org.phenoscape.owl.util.OBOUtil
 import org.phenoscape.owl.util.OntologyUtil
 import org.phenoscape.scowl.OWL._
-import org.semanticweb.owlapi.apibinding.OWLManager
 import org.semanticweb.owlapi.model.OWLAxiom
 import org.semanticweb.owlapi.model.OWLNamedIndividual
 
@@ -19,8 +18,6 @@ object XenbaseExpressionToOWL {
 
   val laevis = Individual(Vocab.XENOPUS_LAEVIS)
   val tropicalis = Individual(Vocab.XENOPUS_TROPICALIS)
-  val manager = OWLManager.createOWLOntologyManager()
-  val rdfsLabel = factory.getRDFSLabel()
 
   def convert(genepageMappingsFile: Source, laevisExpressionFile: Source, tropicalisExpressionFile: Source): Set[OWLAxiom] = {
     val mappings = indexGenepageMappings(genepageMappingsFile)
@@ -28,8 +25,8 @@ object XenbaseExpressionToOWL {
   }
 
   def indexGenepageMappings(mappings: Source): Map[String, String] = {
-    val index = mutable.Map[String, String]()
-    for (mapping <- mappings.getLines()) {
+    val index = mutable.Map.empty[String, String]
+    for (mapping <- mappings.getLines) {
       val items = mapping.split("\t", -1)
       val genepageID = StringUtils.stripToNull(items(0))
       for {
@@ -39,7 +36,7 @@ object XenbaseExpressionToOWL {
         index(StringUtils.stripToNull(geneID)) = genepageID
       }
     }
-    return index
+    index
   }
 
   def convert(expressionData: Source, genepageMappings: Map[String, String], species: OWLNamedIndividual): Set[OWLAxiom] = {
@@ -53,7 +50,7 @@ object XenbaseExpressionToOWL {
     if (StringUtils.stripToEmpty(items(3)) == "unspecified") {
       Set.empty
     } else {
-      val axioms = mutable.Set[OWLAxiom]()
+      val axioms = mutable.Set.empty[OWLAxiom]
       val expression = OntologyUtil.nextIndividual()
       axioms.add(factory.getOWLDeclarationAxiom(expression))
       axioms.add(expression Type GeneExpression)

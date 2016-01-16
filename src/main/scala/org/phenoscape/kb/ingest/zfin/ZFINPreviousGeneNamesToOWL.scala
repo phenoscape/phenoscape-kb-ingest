@@ -6,6 +6,7 @@ import scala.io.Source
 
 import org.apache.commons.lang3.StringUtils
 import org.phenoscape.owl.Vocab
+import org.phenoscape.scowl.OWL._
 import org.semanticweb.owlapi.apibinding.OWLManager
 import org.semanticweb.owlapi.model.IRI
 import org.semanticweb.owlapi.model.OWLAxiom
@@ -13,23 +14,22 @@ import org.semanticweb.owlapi.model.OWLAxiom
 object ZFINPreviousGeneNamesToOWL {
 
   val factory = OWLManager.getOWLDataFactory
-  val manager = OWLManager.createOWLOntologyManager()
   val hasRelatedSynonym = factory.getOWLAnnotationProperty(Vocab.HAS_RELATED_SYNONYM)
 
   def convert(data: Source): Set[OWLAxiom] = data.getLines.flatMap(translate).toSet
 
   def translate(line: String): Set[OWLAxiom] = {
     val items = line.split("\t")
-    val axioms = mutable.Set[OWLAxiom]()
     if (!items(0).startsWith("ZDB-GENE")) {
-      axioms.toSet
+      Set.empty
     } else {
+      val axioms = mutable.Set.empty[OWLAxiom]
       val geneID = StringUtils.stripToNull(items(0))
       val previousName = StringUtils.stripToNull(items(3))
       val geneIRI = IRI.create("http://zfin.org/" + geneID)
-      val gene = factory.getOWLNamedIndividual(geneIRI)
+      val gene = Individual(geneIRI)
       axioms.add(factory.getOWLDeclarationAxiom(gene))
-      axioms.add(factory.getOWLAnnotationAssertionAxiom(hasRelatedSynonym, geneIRI, factory.getOWLLiteral(previousName)))
+      axioms.add(geneIRI Annotation (hasRelatedSynonym, previousName))
       axioms.toSet
     }
   }

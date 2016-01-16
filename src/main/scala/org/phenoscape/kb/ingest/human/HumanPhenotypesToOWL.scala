@@ -17,14 +17,14 @@ import org.semanticweb.owlapi.vocab.OWLRDFVocabulary
 object HumanPhenotypesToOWL {
 
   val factory = OWLManager.getOWLDataFactory
-  val rdfsLabel = factory.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_LABEL.getIRI())
+  val rdfsLabel = factory.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_LABEL.getIRI)
   val human = factory.getOWLNamedIndividual(Vocab.HUMAN)
 
   def convert(phenotypeData: Source): Set[OWLAxiom] = phenotypeData.getLines.drop(1).flatMap(translate).toSet[OWLAxiom]
 
   def translate(phenotypeLine: String): Set[OWLAxiom] = {
     val items = phenotypeLine.split("\t")
-    val axioms = mutable.Set[OWLAxiom]()
+    val axioms = mutable.Set.empty[OWLAxiom]
     val phenotype = OntologyUtil.nextIndividual()
     axioms.add(phenotype Type AnnotatedPhenotype)
     axioms.add(factory.getOWLDeclarationAxiom(phenotype))

@@ -10,21 +10,18 @@ import org.phenoscape.owl.util.ExpressionUtil
 import org.phenoscape.owl.util.OBOUtil
 import org.phenoscape.owl.util.OntologyUtil
 import org.phenoscape.scowl.OWL._
-import org.semanticweb.owlapi.apibinding.OWLManager
 import org.semanticweb.owlapi.model.OWLAxiom
 
 object ZFINExpressionToOWL {
-
-  val manager = OWLManager.createOWLOntologyManager()
 
   def convert(expressionData: Source): Set[OWLAxiom] = expressionData.getLines.flatMap(translate).toSet[OWLAxiom]
 
   def translate(expressionLine: String): Set[OWLAxiom] = {
     val items = expressionLine.split("\t", -1)
-    val axioms = mutable.Set[OWLAxiom]()
     if (items(0).startsWith("ZDB-EFG")) {
-      return axioms.toSet
+      Set.empty
     } else {
+      val axioms = mutable.Set.empty[OWLAxiom]
       val expression = OntologyUtil.nextIndividual()
       axioms.add(factory.getOWLDeclarationAxiom(expression))
       axioms.add(expression Type GeneExpression)
@@ -54,7 +51,7 @@ object ZFINExpressionToOWL {
       val publicationID = StringUtils.stripToNull(items(10))
       val publication = Individual(OBOUtil.zfinIRI(publicationID))
       axioms.add(expression Fact (dcSource, publication))
-      return axioms.toSet
+      axioms.toSet
     }
   }
 
