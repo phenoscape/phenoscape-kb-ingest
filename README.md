@@ -1,5 +1,7 @@
 # phenoscape-kb-ingest
 
+Translations for data sources into Phenoscape Knowlegebase axioms.
+
 ## Building
 
 Install `sbt` on your system. For Mac OS X, it is easily done using [Homebrew](http://brew.sh): `brew install sbt`
