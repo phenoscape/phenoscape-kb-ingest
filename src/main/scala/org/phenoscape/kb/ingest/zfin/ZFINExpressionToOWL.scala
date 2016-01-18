@@ -25,6 +25,7 @@ object ZFINExpressionToOWL {
    * @param expressionLine
    * Example line:
    * ZDB-GENE-000125-4	dlc	AB/TU	ZFA:0000107	eye	\ 	\ 	Pharyngula:Prim-15	Pharyngula:Prim-25	mRNA in situ hybridization	ZDB-PUB-051025-1	ZDB-EST-051107-52		ZDB-FISH-150901-29084
+   *
    * Should generate OWL:
    *
    * Prefix: GO: <http://purl.obolibrary.org/obo/GO_>
@@ -35,7 +36,7 @@ object ZFINExpressionToOWL {
    * Prefix: ps: <http://purl.org/phenoscape/vocab.owl#>
    * Prefix: zfin: <http://zfin.org/>
    * Prefix: uuid: <http://purl.org/phenoscape/uuid/>
-   * 
+   *
    *
    * Individual: uuid:033ab9ee-e20a-4049-8780-24c422bb3c90
    *     Types: ZFA:0000107 # eye
@@ -46,7 +47,7 @@ object ZFINExpressionToOWL {
    *     Types: GO:0010467 # gene expression
    *     Facts:
    *         ps:associated_with_taxon  NCBITaxon:7955, # Danio rerio
-   *         dc:source                 zfin:ZDB-PUB-051025-1, 
+   *         dc:source                 zfin:ZDB-PUB-051025-1,
    *         BFO:0000066               uuid:033ab9ee-e20a-4049-8780-24c422bb3c90, # occurs_in that eye
    *         ps:associated_with_gene   zfin:ZDB-GENE-000125-4 # dlc
    *
@@ -57,12 +58,20 @@ object ZFINExpressionToOWL {
     if (items(0).startsWith("ZDB-EFG")) {
       Set.empty
     } else {
+      // Example OWL that would be generated is provided in comments
       val axioms = mutable.Set.empty[OWLAxiom]
+      // Individual: uuid:3e1ad895-56b2-4b54-a3f8-c99e7b42f646
       val expression = OntologyUtil.nextIndividual()
       axioms.add(factory.getOWLDeclarationAxiom(expression))
+      // Individual: uuid:3e1ad895-56b2-4b54-a3f8-c99e7b42f646
+      //     Types: GO:0010467
       axioms.add(expression Type GeneExpression)
       val structure = OntologyUtil.nextIndividual()
+      // Individual: uuid:033ab9ee-e20a-4049-8780-24c422bb3c90
       axioms.add(factory.getOWLDeclarationAxiom(structure))
+      // Individual: uuid:3e1ad895-56b2-4b54-a3f8-c99e7b42f646
+      //     Facts:
+      //         BFO:0000066 uuid:033ab9ee-e20a-4049-8780-24c422bb3c90
       axioms.add(expression Fact (occurs_in, structure))
       val superStructureID = Option(StringUtils.stripToNull(items(3))).filter(_ != "\\").get
       val subStructureIDOpt = Option(StringUtils.stripToNull(items(5))).filter(_ != "\\")
@@ -76,16 +85,23 @@ object ZFINExpressionToOWL {
         }
         case None => {
           val structureType = Class(OBOUtil.iriForTermID(superStructureID))
+          // Individual: uuid:033ab9ee-e20a-4049-8780-24c422bb3c90
+          //     Types: ZFA:0000107
           axioms.add(structure Type structureType)
         }
       }
       val geneIRI = OBOUtil.zfinIRI(StringUtils.stripToNull(items(0)))
       val gene = Individual(geneIRI)
+      val publicationID = StringUtils.stripToNull(items(10))
+      val publication = Individual(OBOUtil.zfinIRI(publicationID))
+      // Individual: zfin:ZDB-GENE-000125-4
+      //     Facts:
+      //         ps:associated_with_gene   zfin:ZDB-GENE-000125-4,
+      //         ps:associated_with_taxon  NCBITaxon:7955, 
+      //         dc:source                 zfin:ZDB-PUB-051025-1
       axioms.add(factory.getOWLDeclarationAxiom(gene))
       axioms.add(expression Fact (associated_with_gene, gene))
       axioms.add(expression Fact (associated_with_taxon, Zebrafish))
-      val publicationID = StringUtils.stripToNull(items(10))
-      val publication = Individual(OBOUtil.zfinIRI(publicationID))
       axioms.add(expression Fact (dcSource, publication))
       axioms.toSet
     }
