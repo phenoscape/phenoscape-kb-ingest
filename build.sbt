@@ -16,6 +16,16 @@ javaOptions += "-Xmx8G"
 
 resolvers += "Phenoscape Maven repository" at "http://phenoscape.svn.sourceforge.net/svnroot/phenoscape/trunk/maven/repository"
 
+resolvers += "nxparser-repo" at "http://nxparser.googlecode.com/svn/repository/"
+
+resolvers += "Bigdata releases" at "http://www.systap.com/maven/releases/"
+
+resolvers += "Sonatype OSS Releases" at "https://oss.sonatype.org/content/repositories/releases"
+
+resolvers += "apache-repo-releases" at "http://repository.apache.org/content/repositories/releases/"
+
+resolvers += "BBOP repository" at "http://code.berkeleybop.org/maven/repository"
+
 
 libraryDependencies ++= {
   Seq(
