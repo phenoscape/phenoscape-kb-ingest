@@ -16,6 +16,7 @@ javaOptions += "-Xmx8G"
 
 resolvers += "Phenoscape Maven repository" at "http://phenoscape.svn.sourceforge.net/svnroot/phenoscape/trunk/maven/repository"
 
+resolvers += "Bigdata releases" at "http://www.systap.com/maven/releases/"
 
 libraryDependencies ++= {
   Seq(
