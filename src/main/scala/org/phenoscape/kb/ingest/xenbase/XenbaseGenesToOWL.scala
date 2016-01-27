@@ -5,6 +5,7 @@ import scala.io.Source
 
 import org.apache.commons.lang3.StringUtils
 import org.phenoscape.owl.Vocab._
+import org.phenoscape.scowl.Functional._
 import org.phenoscape.scowl.OWL._
 import org.semanticweb.owlapi.apibinding.OWLManager
 import org.semanticweb.owlapi.model.IRI
@@ -28,7 +29,7 @@ object XenbaseGenesToOWL {
     val geneFullName = StringUtils.stripToNull(items(2))
     val geneIRI = getGeneIRI(geneID)
     val gene = Individual(geneIRI)
-    axioms.add(factory.getOWLDeclarationAxiom(gene))
+    axioms.add(Declaration(gene))
     axioms.add(gene Type Gene)
     axioms.add(geneIRI Annotation (rdfsLabel, geneSymbol))
     axioms.add(geneIRI Annotation (hasExactSynonym, geneFullName))

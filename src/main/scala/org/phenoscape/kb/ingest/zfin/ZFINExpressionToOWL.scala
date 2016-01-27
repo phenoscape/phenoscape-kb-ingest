@@ -9,6 +9,7 @@ import org.phenoscape.owl.Vocab._
 import org.phenoscape.owl.util.ExpressionUtil
 import org.phenoscape.owl.util.OBOUtil
 import org.phenoscape.owl.util.OntologyUtil
+import org.phenoscape.scowl.Functional._
 import org.phenoscape.scowl.OWL._
 import org.semanticweb.owlapi.model.OWLAxiom
 
@@ -62,13 +63,13 @@ object ZFINExpressionToOWL {
       val axioms = mutable.Set.empty[OWLAxiom]
       // Individual: uuid:3e1ad895-56b2-4b54-a3f8-c99e7b42f646
       val expression = OntologyUtil.nextIndividual()
-      axioms.add(factory.getOWLDeclarationAxiom(expression))
+      axioms.add(Declaration(expression))
       // Individual: uuid:3e1ad895-56b2-4b54-a3f8-c99e7b42f646
       //     Types: GO:0010467
       axioms.add(expression Type GeneExpression)
       val structure = OntologyUtil.nextIndividual()
       // Individual: uuid:033ab9ee-e20a-4049-8780-24c422bb3c90
-      axioms.add(factory.getOWLDeclarationAxiom(structure))
+      axioms.add(Declaration(structure))
       // Individual: uuid:3e1ad895-56b2-4b54-a3f8-c99e7b42f646
       //     Facts:
       //         BFO:0000066 uuid:033ab9ee-e20a-4049-8780-24c422bb3c90
@@ -99,7 +100,7 @@ object ZFINExpressionToOWL {
       //         ps:associated_with_gene   zfin:ZDB-GENE-000125-4,
       //         ps:associated_with_taxon  NCBITaxon:7955, 
       //         dc:source                 zfin:ZDB-PUB-051025-1
-      axioms.add(factory.getOWLDeclarationAxiom(gene))
+      axioms.add(Declaration(gene))
       axioms.add(expression Fact (associated_with_gene, gene))
       axioms.add(expression Fact (associated_with_taxon, Zebrafish))
       axioms.add(expression Fact (dcSource, publication))

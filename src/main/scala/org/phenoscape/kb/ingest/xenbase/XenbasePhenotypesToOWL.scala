@@ -9,6 +9,7 @@ import org.phenoscape.owl.Vocab._
 import org.phenoscape.owl.util.ExpressionUtil
 import org.phenoscape.owl.util.OBOUtil
 import org.phenoscape.owl.util.OntologyUtil
+import org.phenoscape.scowl.Functional._
 import org.phenoscape.scowl.OWL._
 import org.semanticweb.owlapi.model.OWLAxiom
 import org.semanticweb.owlapi.model.OWLNamedIndividual
@@ -26,8 +27,7 @@ object XenbasePhenotypesToOWL {
     if (geneText != null) {
       val phenotype = OntologyUtil.nextIndividual()
       val sourceText = StringUtils.stripToNull(items(0)).toUpperCase
-      val source = if (sourceText.contains("IMG"))
-        Individual(OBOUtil.xenbaseImageIRI(sourceText))
+      val source = if (sourceText.contains("IMG")) Individual(OBOUtil.xenbaseImageIRI(sourceText))
       else Individual(OBOUtil.xenbaseArticleIRI(sourceText))
       val species = taxon(StringUtils.stripToNull(items(1)))
       val gene = Individual(XenbaseGenesToOWL.getGeneIRI(fixGeneID(geneText)))
@@ -47,9 +47,9 @@ object XenbasePhenotypesToOWL {
         phenotype Fact (associated_with_taxon, species),
         phenotype Fact (dcSource, source),
         phenotype Type phenotypeClass,
-        factory.getOWLDeclarationAxiom(phenotypeClass),
-        factory.getOWLDeclarationAxiom(gene),
-        factory.getOWLDeclarationAxiom(species)) ++
+        Declaration(phenotypeClass),
+        Declaration(gene),
+        Declaration(species)) ++
         entityAxioms ++
         relatedEntityAxioms
     } else Set.empty

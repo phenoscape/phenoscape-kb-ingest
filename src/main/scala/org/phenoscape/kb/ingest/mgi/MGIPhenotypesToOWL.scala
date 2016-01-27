@@ -8,6 +8,7 @@ import org.phenoscape.owl.Vocab
 import org.phenoscape.owl.Vocab._
 import org.phenoscape.owl.util.OBOUtil
 import org.phenoscape.owl.util.OntologyUtil
+import org.phenoscape.scowl.Functional._
 import org.phenoscape.scowl.OWL._
 import org.semanticweb.owlapi.model.OWLAxiom
 
@@ -22,13 +23,13 @@ object MGIPhenotypesToOWL {
     val axioms = mutable.Set.empty[OWLAxiom]
     val phenotype = OntologyUtil.nextIndividual()
     axioms.add(phenotype Type AnnotatedPhenotype)
-    axioms.add(factory.getOWLDeclarationAxiom(phenotype))
+    axioms.add(Declaration(phenotype))
     val phenotypeID = StringUtils.stripToNull(items(10))
     val phenotypeClass = Class(OBOUtil.iriForTermID(phenotypeID))
     axioms.add(phenotype Type phenotypeClass)
     val geneIRI = MGIGeneticMarkersToOWL.getGeneIRI(StringUtils.stripToNull(items(0)))
     val gene = Individual(geneIRI)
-    axioms.add(factory.getOWLDeclarationAxiom(gene))
+    axioms.add(Declaration(gene))
     axioms.add(phenotype Fact (associated_with_gene, gene))
     axioms.add(phenotype Fact (associated_with_taxon, mouse))
     val publicationID = StringUtils.stripToNull(items(11))
