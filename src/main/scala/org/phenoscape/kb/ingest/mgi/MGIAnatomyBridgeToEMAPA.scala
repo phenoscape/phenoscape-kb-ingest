@@ -7,6 +7,7 @@ import scala.io.Source
 
 import org.apache.commons.lang3.StringUtils
 import org.phenoscape.owl.util.OBOUtil
+import org.phenoscape.scowl.Functional._
 import org.phenoscape.scowl.OWL._
 import org.semanticweb.owlapi.apibinding.OWLManager
 import org.semanticweb.owlapi.model.IRI
@@ -28,8 +29,8 @@ object MGIAnatomyBridgeToEMAPA {
     val mgiTerm = Class(OBOUtil.mgiAnatomyIRI(StringUtils.stripToNull(items(0))))
     val emapaTerm = Class(OBOUtil.iriForTermID(StringUtils.stripToNull(items(1))))
     Set(
-      factory.getOWLDeclarationAxiom(mgiTerm),
-      factory.getOWLDeclarationAxiom(emapaTerm),
+      Declaration(mgiTerm),
+      Declaration(emapaTerm),
       mgiTerm SubClassOf emapaTerm)
   }
 

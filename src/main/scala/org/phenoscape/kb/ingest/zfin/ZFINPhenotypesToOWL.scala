@@ -10,6 +10,7 @@ import org.phenoscape.owl.Vocab._
 import org.phenoscape.owl.util.ExpressionUtil
 import org.phenoscape.owl.util.OBOUtil
 import org.phenoscape.owl.util.OntologyUtil
+import org.phenoscape.scowl.Functional._
 import org.phenoscape.scowl.OWL._
 import org.semanticweb.owlapi.model.IRI
 import org.semanticweb.owlapi.model.OWLAxiom
@@ -21,11 +22,10 @@ object ZFINPhenotypesToOWL {
 
   def translate(expressionLine: String): Set[OWLAxiom] = {
     val items = expressionLine.split("\t")
-    val involved = mutable.Set[OWLClass]()
     val axioms = mutable.Set[OWLAxiom]()
     val phenotype = OntologyUtil.nextIndividual()
     axioms.add(phenotype Type AnnotatedPhenotype)
-    axioms.add(factory.getOWLDeclarationAxiom(phenotype))
+    axioms.add(Declaration(phenotype))
     val superStructureID = StringUtils.stripToNull(items(7))
     val subStructureID = StringUtils.stripToNull(items(3))
     val relationID = StringUtils.stripToNull(items(5))
@@ -70,14 +70,14 @@ object ZFINPhenotypesToOWL {
       case (entity: OWLClass, quality: OWLClass, relatedEntity: OWLClass)   => (quality and (inheres_in some entity) and (towards some relatedEntity))
     }
     if (eq_phenotype != null) {
-      axioms.add(factory.getOWLDeclarationAxiom(MultiCellularOrganism))
+      axioms.add(Declaration(MultiCellularOrganism))
       val (phenotypeClass, phenotypeAxioms) = ExpressionUtil.nameForExpressionWithAxioms(eq_phenotype)
-      axioms.add(factory.getOWLDeclarationAxiom(phenotypeClass))
+      axioms.add(Declaration(phenotypeClass))
       axioms.addAll(phenotypeAxioms)
       axioms.add(phenotype Type phenotypeClass)
       val geneIRI = IRI.create("http://zfin.org/" + StringUtils.stripToNull(items(2)))
       val gene = Individual(geneIRI)
-      axioms.add(factory.getOWLDeclarationAxiom(gene))
+      axioms.add(Declaration(gene))
       axioms.add(phenotype Fact (associated_with_gene, gene))
       axioms.add(phenotype Fact (associated_with_taxon, Zebrafish))
     }
