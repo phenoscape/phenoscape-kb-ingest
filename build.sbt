@@ -4,7 +4,7 @@ organization  := "org.phenoscape"
 
 name          := "phenoscape-kb-ingest"
 
-version       := "1.4.1"
+version       := "1.4.2"
 
 //mainClass in Compile := Some("org.phenoscape.Main")
 
@@ -30,8 +30,8 @@ resolvers += "BBOP repository" at "http://code.berkeleybop.org/maven/repository"
 libraryDependencies ++= {
   Seq(
     "net.sourceforge.owlapi" %   "owlapi-distribution"    % "3.5.0",
-	"org.phenoscape"         %   "scowl"                  % "0.9.2",
-    "org.phenoscape"         %%  "kb-owl-tools"           % "1.4.1",
+	"org.phenoscape"         %%  "scowl"                  % "0.9.3",
+    "org.phenoscape"         %%  "kb-owl-tools"           % "1.4.2",
     "com.github.tototoshi"   %%  "scala-csv"              % "1.2.2",
     "org.apache.commons"     %   "commons-lang3"          % "3.1"
   )
