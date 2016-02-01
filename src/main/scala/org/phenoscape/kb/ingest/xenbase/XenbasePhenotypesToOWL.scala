@@ -32,17 +32,22 @@ object XenbasePhenotypesToOWL {
       val species = taxon(StringUtils.stripToNull(items(1)))
       val gene = Individual(XenbaseGenesToOWL.getGeneIRI(fixGeneID(geneText)))
       val quality = Class(OBOUtil.iriForTermID(StringUtils.stripToNull(items(15))))
+      val qualityLabel = StringUtils.stripToEmpty(items(16))
       val (entity, entityAxioms) = OBOUtil.translatePostCompositionNamed(StringUtils.stripToNull(items(13)))
+      val entityLabel = StringUtils.stripToEmpty(items(14))
       val (optionalRelatedEntity, relatedEntityAxioms) = OntologyUtil.optionWithSet(Option(StringUtils.stripToNull(items(17))).map(OBOUtil.translatePostCompositionNamed))
+      val relatedEntityLabel = Option(StringUtils.stripToNull(items(18))).map(re => s" towards $re").getOrElse("")
+      val phenotypeLabel = s"$qualityLabel: $entityLabel$relatedEntityLabel"
       val eqPhenotype = (entity, quality, optionalRelatedEntity) match {
-        case (entity, Absent, None)                             => (LacksAllPartsOfType and (inheres_in some MultiCellularOrganism) and (towards value Individual(entity.getIRI)))
-        case (entity, LacksAllPartsOfType, Some(relatedEntity)) => (LacksAllPartsOfType and (inheres_in some entity) and (towards value Individual(relatedEntity.getIRI)))
-        case (entity, quality, Some(relatedEntity))             => quality and (inheres_in some entity) and (towards some relatedEntity)
-        case (entity, quality, None)                            => quality and (inheres_in some entity)
+        case (entity, Absent, None)                             => has_part some (LacksAllPartsOfType and (inheres_in some MultiCellularOrganism) and (towards value Individual(entity.getIRI)))
+        case (entity, LacksAllPartsOfType, Some(relatedEntity)) => has_part some (LacksAllPartsOfType and (inheres_in some entity) and (towards value Individual(relatedEntity.getIRI)))
+        case (entity, quality, Some(relatedEntity))             => has_part some (quality and (inheres_in some entity) and (towards some relatedEntity))
+        case (entity, quality, None)                            => has_part some (quality and (inheres_in some entity))
       }
       val (phenotypeClass, phenotypeAxioms) = ExpressionUtil.nameForExpressionWithAxioms(eqPhenotype)
       Set(
         phenotype Type AnnotatedPhenotype,
+        phenotypeClass Annotation (rdfsLabel, phenotypeLabel),
         phenotype Fact (associated_with_gene, gene),
         phenotype Fact (associated_with_taxon, species),
         phenotype Fact (dcSource, source),
