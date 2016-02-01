@@ -4,7 +4,7 @@ organization  := "org.phenoscape"
 
 name          := "phenoscape-kb-ingest"
 
-version       := "1.4.2"
+version       := "1.4.3"
 
 //mainClass in Compile := Some("org.phenoscape.Main")
 
