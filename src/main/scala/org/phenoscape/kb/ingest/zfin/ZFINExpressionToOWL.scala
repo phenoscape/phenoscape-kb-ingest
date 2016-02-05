@@ -107,5 +107,15 @@ object ZFINExpressionToOWL {
       axioms.toSet
     }
   }
+  
+    object Main extends App {
+    val source = io.Source.fromFile("source_files/Danio_rerio_expr_simple.tsv")
+    for (line <- source.getLines) {
+      println(line)
+    }
+    val inst: ZFINExpressionToOWL = new ZFINExpressionToOWL()
+    source.close();
+    //convert(source);
+  }
 
 }

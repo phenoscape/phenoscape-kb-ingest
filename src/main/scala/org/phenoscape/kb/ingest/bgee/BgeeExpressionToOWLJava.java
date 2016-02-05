@@ -11,8 +11,10 @@ import java.util.Map;
 
 //import org.phenoscape.owl.util.OntologyUtil;
 import org.semanticweb.owlapi.model.OWLAxiom;
-import uk.ac.manchester.cs.owl.owlapi.OWLDataFactoryImpl;
+import org.semanticweb.owlapi.model.OWLNamedIndividual;
 
+import uk.ac.manchester.cs.owl.owlapi.OWLDataFactoryImpl;
+import org.phenoscape.owl.util.OntologyUtil;
 
 // TODO: potentially change directories to a Java folder (instead of Scala)
 
@@ -23,16 +25,33 @@ public class BgeeExpressionToOWLJava {
 		System.out.println("Convert Bgee: " + filePath);
 		Map<String, String> geneToAnatomyMap = parseFile(filePath);
 		
-		List<OWLAxiom> list = new ArrayList<OWLAxiom>();
+		List<OWLAxiom> axioms = new ArrayList<OWLAxiom>(); //one axiom object or is there an axiom list/set for each expression
 		
-	    //?? expression = OntologyUtil.nextIndividual(); 
-		// what does this do and how do you add the ontologyutil dependency without maven?
+		for (String gene: geneToAnatomyMap.keySet()){
+			OWLDataFactoryImpl factory = new OWLDataFactoryImpl();
 
-//		OWLDataFactoryImpl factory = new OWLDataFactoryImpl();
-//		factory.getOWLDeclarationAxiom(expression);
+			OWLNamedIndividual expression = OntologyUtil.nextIndividual();			
+			axioms.add(factory.getOWLDeclarationAxiom(expression));
+			//axioms.add(expression Type GeneExpression);
+			
+			
+			factory.add(factory.getOWLDeclarationAxiom(gene)); //need to pass in an OWLEntity for gene
+			
+			axioms.add(factory.getOWLDeclarationAxiom(anatomicalID)) //TODO: does this need to be transformed beforehand?
+		      
+		      // add fact associating expression and gene to axiom
+		    axioms.add(expression Fact (associated_with_gene, gene))
+		      
+		      // add fact associating expression and anatomy to axiom
+		    axioms.add(expression Fact (associated_with_anatomy, anatomicalID))  //http://owlapi.sourceforge.net/javadoc/org/semanticweb/owlapi/model/OWLObjectProperty.html
+			
+		    //?? expression = OntologyUtil.nextIndividual(); 
+			// what does this do and how do you add the ontologyutil dependency without maven?
+	
+	//		factory.getOWLDeclarationAxiom(expression);
 
-		
-		return null;
+		}
+		return axioms;
 	}
 
 	private static Map<String, String> parseFile(String filePath) {
