@@ -9,6 +9,7 @@ import org.phenoscape.owl.Vocab._
 import org.phenoscape.owl.util.ExpressionUtil
 import org.phenoscape.owl.util.OBOUtil
 import org.phenoscape.owl.util.OntologyUtil
+import org.phenoscape.scowl.Functional._
 import org.phenoscape.scowl.OWL._
 import org.semanticweb.owlapi.model.OWLAxiom
 import org.semanticweb.owlapi.model.OWLNamedIndividual
@@ -26,30 +27,34 @@ object XenbasePhenotypesToOWL {
     if (geneText != null) {
       val phenotype = OntologyUtil.nextIndividual()
       val sourceText = StringUtils.stripToNull(items(0)).toUpperCase
-      val source = if (sourceText.contains("IMG"))
-        Individual(OBOUtil.xenbaseImageIRI(sourceText))
+      val source = if (sourceText.contains("IMG")) Individual(OBOUtil.xenbaseImageIRI(sourceText))
       else Individual(OBOUtil.xenbaseArticleIRI(sourceText))
       val species = taxon(StringUtils.stripToNull(items(1)))
       val gene = Individual(XenbaseGenesToOWL.getGeneIRI(fixGeneID(geneText)))
       val quality = Class(OBOUtil.iriForTermID(StringUtils.stripToNull(items(15))))
+      val qualityLabel = StringUtils.stripToEmpty(items(16))
       val (entity, entityAxioms) = OBOUtil.translatePostCompositionNamed(StringUtils.stripToNull(items(13)))
+      val entityLabel = StringUtils.stripToEmpty(items(14))
       val (optionalRelatedEntity, relatedEntityAxioms) = OntologyUtil.optionWithSet(Option(StringUtils.stripToNull(items(17))).map(OBOUtil.translatePostCompositionNamed))
+      val relatedEntityLabel = Option(StringUtils.stripToNull(items(18))).map(re => s" towards $re").getOrElse("")
+      val phenotypeLabel = s"$qualityLabel: $entityLabel$relatedEntityLabel"
       val eqPhenotype = (entity, quality, optionalRelatedEntity) match {
-        case (entity, Absent, None)                             => (LacksAllPartsOfType and (inheres_in some MultiCellularOrganism) and (towards value Individual(entity.getIRI)))
-        case (entity, LacksAllPartsOfType, Some(relatedEntity)) => (LacksAllPartsOfType and (inheres_in some entity) and (towards value Individual(relatedEntity.getIRI)))
-        case (entity, quality, Some(relatedEntity))             => quality and (inheres_in some entity) and (towards some relatedEntity)
-        case (entity, quality, None)                            => quality and (inheres_in some entity)
+        case (entity, Absent, None)                             => has_part some (LacksAllPartsOfType and (inheres_in some MultiCellularOrganism) and (towards value Individual(entity.getIRI)))
+        case (entity, LacksAllPartsOfType, Some(relatedEntity)) => has_part some (LacksAllPartsOfType and (inheres_in some entity) and (towards value Individual(relatedEntity.getIRI)))
+        case (entity, quality, Some(relatedEntity))             => has_part some (quality and (inheres_in some entity) and (towards some relatedEntity))
+        case (entity, quality, None)                            => has_part some (quality and (inheres_in some entity))
       }
       val (phenotypeClass, phenotypeAxioms) = ExpressionUtil.nameForExpressionWithAxioms(eqPhenotype)
       Set(
         phenotype Type AnnotatedPhenotype,
+        phenotypeClass Annotation (rdfsLabel, phenotypeLabel),
         phenotype Fact (associated_with_gene, gene),
         phenotype Fact (associated_with_taxon, species),
         phenotype Fact (dcSource, source),
         phenotype Type phenotypeClass,
-        factory.getOWLDeclarationAxiom(phenotypeClass),
-        factory.getOWLDeclarationAxiom(gene),
-        factory.getOWLDeclarationAxiom(species)) ++
+        Declaration(phenotypeClass),
+        Declaration(gene),
+        Declaration(species)) ++
         entityAxioms ++
         relatedEntityAxioms
     } else Set.empty

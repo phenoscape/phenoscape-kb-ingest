@@ -8,6 +8,7 @@ import org.phenoscape.owl.Vocab
 import org.phenoscape.owl.Vocab._
 import org.phenoscape.owl.util.OBOUtil
 import org.phenoscape.owl.util.OntologyUtil
+import org.phenoscape.scowl.Functional._
 import org.phenoscape.scowl.OWL._
 import org.semanticweb.owlapi.apibinding.OWLManager
 import org.semanticweb.owlapi.model.IRI
@@ -27,16 +28,16 @@ object HumanPhenotypesToOWL {
     val axioms = mutable.Set.empty[OWLAxiom]
     val phenotype = OntologyUtil.nextIndividual()
     axioms.add(phenotype Type AnnotatedPhenotype)
-    axioms.add(factory.getOWLDeclarationAxiom(phenotype))
+    axioms.add(Declaration(phenotype))
     val phenotypeID = StringUtils.stripToNull(items(3))
     val phenotypeClass = Class(OBOUtil.iriForTermID(phenotypeID))
     axioms.add(phenotype Type phenotypeClass)
     val geneIRI = IRI.create("http://www.ncbi.nlm.nih.gov/gene/" + StringUtils.stripToNull(items(0)))
     val geneSymbol = StringUtils.stripToNull(items(1))
-    axioms.add(geneIRI Annotation (rdfsLabel, factory.getOWLLiteral(geneSymbol)))
+    axioms.add(geneIRI Annotation (rdfsLabel, geneSymbol))
     val gene = Individual(geneIRI)
     axioms.add(gene Type Gene)
-    axioms.add(factory.getOWLDeclarationAxiom(gene))
+    axioms.add(Declaration(gene))
     axioms.add(phenotype Fact (associated_with_gene, gene))
     axioms.add(phenotype Fact (associated_with_taxon, human))
     axioms.toSet
