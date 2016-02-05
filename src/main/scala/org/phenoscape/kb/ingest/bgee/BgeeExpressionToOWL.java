@@ -54,7 +54,7 @@ public class BgeeExpressionToOWL {
 				String present = strArr[6];
 				if (present.equals("present")) {
 					String geneID = strArr[0];
-					String anatomicalID = strArr[1];
+					String anatomicalID = strArr[2];
 					geneToAnatomy.put(geneID, anatomicalID);
 				}
 				line = reader.readLine();
