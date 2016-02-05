@@ -10,6 +10,7 @@ import org.phenoscape.owl.Vocab
 import org.phenoscape.owl.Vocab._
 import org.phenoscape.owl.util.OBOUtil
 import org.phenoscape.owl.util.OntologyUtil
+import org.phenoscape.scowl.Functional._
 import org.phenoscape.scowl.OWL._
 import org.semanticweb.owlapi.model.OWLAxiom
 import org.semanticweb.owlapi.model.OWLNamedIndividual
@@ -41,8 +42,8 @@ object XenbaseExpressionToOWL {
 
   def convert(expressionData: Source, genepageMappings: Map[String, String], species: OWLNamedIndividual): Set[OWLAxiom] = {
     expressionData.getLines.flatMap(translate(_, genepageMappings, species)).toSet[OWLAxiom] +
-      (laevis Annotation (rdfsLabel, factory.getOWLLiteral("Xenopus laevis"))) +
-      (tropicalis Annotation (rdfsLabel, factory.getOWLLiteral("Xenopus tropicalis")))
+      (laevis Annotation (rdfsLabel, "Xenopus laevis")) +
+      (tropicalis Annotation (rdfsLabel, "Xenopus tropicalis"))
   }
 
   def translate(expressionLine: String, genepageMappings: Map[String, String], species: OWLNamedIndividual): Set[OWLAxiom] = {
@@ -52,14 +53,14 @@ object XenbaseExpressionToOWL {
     } else {
       val axioms = mutable.Set.empty[OWLAxiom]
       val expression = OntologyUtil.nextIndividual()
-      axioms.add(factory.getOWLDeclarationAxiom(expression))
+      axioms.add(Declaration(expression))
       axioms.add(expression Type GeneExpression)
       val structureItems = items(3).split(",", -1)
       for (structureItem <- structureItems) {
         val structureID = StringUtils.stripToNull(structureItem.trim().split(" ")(0))
         val structureType = Class(OBOUtil.iriForTermID(structureID))
         val structure = OntologyUtil.nextIndividual()
-        axioms.add(factory.getOWLDeclarationAxiom(structure))
+        axioms.add(Declaration(structure))
         axioms.add(structure Type structureType)
         axioms.add(expression Fact (occurs_in, structure))
       }
@@ -71,7 +72,7 @@ object XenbaseExpressionToOWL {
       val genepageID = genepageMappings(StringUtils.stripToNull(items(0)))
       val geneIRI = XenbaseGenesToOWL.getGeneIRI(genepageID)
       val gene = Individual(geneIRI)
-      axioms.add(factory.getOWLDeclarationAxiom(gene))
+      axioms.add(Declaration(gene))
       axioms.add(expression Fact (associated_with_gene, gene))
       axioms.add(expression Fact (associated_with_taxon, species))
       axioms.toSet
