@@ -13,7 +13,7 @@ public class BgeeTest {
 		String absPath = new File("").getAbsolutePath();
 		String filePath = absPath + sourceDirectory + danio_rerio;
 		System.out.println(filePath);
-		BgeeExpressionToOWL.convert(filePath);
+		BgeeExpressionToOWLJava.convert(filePath);
 	}
 
 }

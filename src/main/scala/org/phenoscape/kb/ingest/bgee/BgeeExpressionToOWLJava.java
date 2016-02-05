@@ -16,7 +16,7 @@ import uk.ac.manchester.cs.owl.owlapi.OWLDataFactoryImpl;
 
 // TODO: potentially change directories to a Java folder (instead of Scala)
 
-public class BgeeExpressionToOWL {
+public class BgeeExpressionToOWLJava {
 
 	public static List<OWLAxiom> convert(String filePath) {
 		//TODO: turn GeneID into an IRI in BGee?
