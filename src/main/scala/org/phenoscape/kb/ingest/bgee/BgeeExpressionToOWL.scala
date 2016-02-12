@@ -2,7 +2,9 @@ package org.phenoscape.kb.ingest.zfin
 
 import scala.collection.JavaConversions._
 import scala.collection.mutable
+import java.io._
 import scala.io.Source
+import org.phenoscape.scowl.Functional._
 
 import org.apache.commons.lang3.StringUtils
 import org.phenoscape.owl.Vocab._
@@ -17,6 +19,7 @@ object BgeeExpressionToOWL {
   def convert(expressionData: Source): Set[OWLAxiom] = expressionData.getLines.flatMap(translate).toSet[OWLAxiom]
 
   def translate(expressionLine: String): Set[OWLAxiom] = {
+    println("======")
     val items = expressionLine.split("\t", -1)
     if (items(6).startsWith("absent")) { //not too sure about function of this line originally, but it now skips over absent gene expressions
       Set.empty
@@ -27,44 +30,54 @@ object BgeeExpressionToOWL {
 
       val expression = OntologyUtil.nextIndividual()
       //add expression to axiom
-      axioms.add(factory.getOWLDeclarationAxiom(expression)) //add OWLEntity?
+      axioms.add(Declaration(expression)) //from this: import org.phenoscape.scowl.Functional._
+      println(Declaration(expression))
       axioms.add(expression Type GeneExpression) //add expression
-      
-      
-      
-      val structure = OntologyUtil.nextIndividual() //why called multiple times?
-      axioms.add(factory.getOWLDeclarationAxiom(structure))
-      axioms.add(expression Fact (occurs_in, structure)) //which expression to use for  anatomicalID relationship?
+      println(expression Type GeneExpression)
     
+      val structure = OntologyUtil.nextIndividual() 
+      axioms.add(Declaration(structure))
+      val structureType = Class(OBOUtil.iriForTermID(Option(StringUtils.stripToNull(items(2))).filter(_ != "\\").get))
+      axioms.add(structure Type structureType)
+      println(structure Type structureType)
+      
+      val geneIRI = OBOUtil.zfinIRI(StringUtils.stripToNull(items(0)))
+      val gene = Individual(geneIRI)
+      axioms.add(Declaration(gene))
+
 //      val geneIRI = OBOUtil.zfinIRI(StringUtils.stripToNull(items(0))) //TODO: after finding out how to convert geneID into IRI
 //      val gene = Individual(geneIRI)
       
-      // add gene to axiom
-      axioms.add(factory.getOWLDeclarationAxiom(gene))
-      
-      // add anatomicalID to axiom
-      axioms.add(factory.getOWLDeclarationAxiom(anatomicalID)) //TODO: does this need to be transformed beforehand?
-      
-      // add fact associating expression and gene to axiom
       axioms.add(expression Fact (associated_with_gene, gene))
-      
-      // add fact associating expression and anatomy to axiom
-      axioms.add(expression Fact (associated_with_anatomy, anatomicalID))  //http://owlapi.sourceforge.net/javadoc/org/semanticweb/owlapi/model/OWLObjectProperty.html
-      // TODO: which fact to use
+      println(expression Fact (associated_with_gene, gene))
+      axioms.add(expression Fact (occurs_in, structure))
+      println(expression Fact (occurs_in, structure))
       axioms.toSet
     }
   }
 }
-  object Main extends App {
-    val source = io.Source.fromFile("source_files/Danio_rerio_expr_simple.tsv")
-    for (line <- source.getLines) {
-      println(line)
-    }
-    val inst: ZFINExpressionToOWL = new ZFINExpressionToOWL()
-    source.close();
-    //convert(source);
-  }
-  
+
+// object Main extends App {
+//    val source = io.Source.fromFile("source_files/Danio_rerio_expr_simple.tsv")
+////    for (line <- source.getLines) {
+////      println(line)
+////    }
+//    println("done parsing")
+//    val test = BgeeExpressionToOWL.convert(source)
+//    println("done converting")
+//    
+//    //println(test.isEmpty); //how to view items from Set[OWLAxiom]
+////    println(test);
+//    
+//    val file = new File("BgeeResult.txt")
+//    val bw = new BufferedWriter(new FileWriter(file))
+//    bw.write(test.toString())
+//    bw.close()
+//    
+//    source.close();
+//    //convert(source);
+//  }
+ 
   
   // each gene within the file has an expression  (each line)
   // respective expression of the gene on that line
