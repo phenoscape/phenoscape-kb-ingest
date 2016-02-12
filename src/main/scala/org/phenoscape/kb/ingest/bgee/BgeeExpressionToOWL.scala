@@ -30,6 +30,8 @@ object BgeeExpressionToOWL {
       axioms.add(factory.getOWLDeclarationAxiom(expression)) //add OWLEntity?
       axioms.add(expression Type GeneExpression) //add expression
       
+      
+      
       val structure = OntologyUtil.nextIndividual() //why called multiple times?
       axioms.add(factory.getOWLDeclarationAxiom(structure))
       axioms.add(expression Fact (occurs_in, structure)) //which expression to use for  anatomicalID relationship?

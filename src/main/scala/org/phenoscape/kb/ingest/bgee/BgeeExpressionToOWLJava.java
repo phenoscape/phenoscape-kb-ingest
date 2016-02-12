@@ -9,12 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.phenoscape.owl.util.OntologyUtil;
 //import org.phenoscape.owl.util.OntologyUtil;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
-
 import uk.ac.manchester.cs.owl.owlapi.OWLDataFactoryImpl;
-import org.phenoscape.owl.util.OntologyUtil;
 
 // TODO: potentially change directories to a Java folder (instead of Scala)
 
@@ -32,12 +31,17 @@ public class BgeeExpressionToOWLJava {
 
 			OWLNamedIndividual expression = OntologyUtil.nextIndividual();			
 			axioms.add(factory.getOWLDeclarationAxiom(expression));
-			//axioms.add(expression Type GeneExpression);
+			axioms.add(factory.getOWLClassAssertionAxiom(GeneExpression, expression)); //axioms.add(expression Type GeneExpression);
 			
+			
+			//change gene into an OwlEntity
 			
 			factory.add(factory.getOWLDeclarationAxiom(gene)); //need to pass in an OWLEntity for gene
 			
-			axioms.add(factory.getOWLDeclarationAxiom(anatomicalID)) //TODO: does this need to be transformed beforehand?
+			
+			//add anatomical ID
+			OWLNamedIndividual structure = OntologyUtil.nextIndividual();
+			axioms.add(factory.getOWLDeclarationAxiom(structure)) //TODO: does this need to be transformed beforehand?
 		      
 		      // add fact associating expression and gene to axiom
 		    axioms.add(expression Fact (associated_with_gene, gene))

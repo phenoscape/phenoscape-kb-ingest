@@ -1,6 +1,7 @@
 package org.phenoscape.kb.ingest.zfin
 
 import scala.collection.JavaConversions._
+import java.io._
 import scala.collection.mutable
 import scala.io.Source
 
@@ -63,10 +64,11 @@ object ZFINExpressionToOWL {
       val axioms = mutable.Set.empty[OWLAxiom]
       // Individual: uuid:3e1ad895-56b2-4b54-a3f8-c99e7b42f646
       val expression = OntologyUtil.nextIndividual()
-      axioms.add(Declaration(expression))
+      axioms.add(Declaration(expression)) //from this: import org.phenoscape.scowl.Functional._
       // Individual: uuid:3e1ad895-56b2-4b54-a3f8-c99e7b42f646
       //     Types: GO:0010467
-      axioms.add(expression Type GeneExpression)
+      axioms.add(expression Type GeneExpression) //left is OwlIndividual adn right is OwlClass. left instantiates right
+      // check which OWL APIs this translates to in scowl
       val structure = OntologyUtil.nextIndividual()
       // Individual: uuid:033ab9ee-e20a-4049-8780-24c422bb3c90
       axioms.add(Declaration(structure))
@@ -107,15 +109,27 @@ object ZFINExpressionToOWL {
       axioms.toSet
     }
   }
-  
-    object Main extends App {
-    val source = io.Source.fromFile("source_files/Danio_rerio_expr_simple.tsv")
-    for (line <- source.getLines) {
-      println(line)
-    }
-    val inst: ZFINExpressionToOWL = new ZFINExpressionToOWL()
+}
+
+ object Main extends App {
+    val source = io.Source.fromFile("source_files/wildtype-expression_fish.txt")
+//    for (line <- source.getLines) {
+//      println(line)
+//    }
+    println("done parsing")
+    val test = ZFINExpressionToOWL.convert(source)
+    println("done converting")
+    
+    //println(test.isEmpty); //how to view items from Set[OWLAxiom]
+//    println(test);
+    
+    val file = new File("ZFINresult.txt")
+    val bw = new BufferedWriter(new FileWriter(file))
+    bw.write(test.toString())
+    bw.close()
+    
     source.close();
     //convert(source);
   }
 
-}
+  
