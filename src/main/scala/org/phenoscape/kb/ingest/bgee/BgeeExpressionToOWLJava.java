@@ -56,7 +56,6 @@ public class BgeeExpressionToOWLJava {
 		    axioms.add(factory.getOWLObjectPropertyAssertionAxiom(Vocab.occurs_in(), expression, structure));
 			
 		    //?? expression = OntologyUtil.nextIndividual(); 
-			// what does this do and how do you add the ontologyutil dependency without maven?
 	
 
 		}

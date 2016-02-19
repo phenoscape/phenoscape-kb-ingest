@@ -19,7 +19,7 @@ object BgeeExpressionToOWL {
   def convert(expressionData: Source): Set[OWLAxiom] = expressionData.getLines.flatMap(translate).toSet[OWLAxiom]
 
   def translate(expressionLine: String): Set[OWLAxiom] = {
-    println("======")
+//    println("======")
     val items = expressionLine.split("\t", -1)
     if (items(6).startsWith("absent")) { //not too sure about function of this line originally, but it now skips over absent gene expressions
       Set.empty
@@ -31,54 +31,60 @@ object BgeeExpressionToOWL {
       val expression = OntologyUtil.nextIndividual()
       //add expression to axiom
       axioms.add(Declaration(expression)) //from this: import org.phenoscape.scowl.Functional._
-      println(Declaration(expression))
+//      println(Declaration(expression))
       axioms.add(expression Type GeneExpression) //add expression
-      println(expression Type GeneExpression)
+//      println(expression Type GeneExpression)
     
       val structure = OntologyUtil.nextIndividual() 
       axioms.add(Declaration(structure))
       val structureType = Class(OBOUtil.iriForTermID(Option(StringUtils.stripToNull(items(2))).filter(_ != "\\").get))
       axioms.add(structure Type structureType)
-      println(structure Type structureType)
+//      println(structure Type structureType)
       
+//      val geneIRI = new IRI("http://identifiers.org/ensembl/",StringUtils.stripToNull(items(0)))
       val geneIRI = OBOUtil.zfinIRI(StringUtils.stripToNull(items(0)))
       val gene = Individual(geneIRI)
       axioms.add(Declaration(gene))
-
-//      val geneIRI = OBOUtil.zfinIRI(StringUtils.stripToNull(items(0))) //TODO: after finding out how to convert geneID into IRI
-//      val gene = Individual(geneIRI)
       
       axioms.add(expression Fact (associated_with_gene, gene))
-      println(expression Fact (associated_with_gene, gene))
+//      println(expression Fact (associated_with_gene, gene))
       axioms.add(expression Fact (occurs_in, structure))
-      println(expression Fact (occurs_in, structure))
+//      println(expression Fact (occurs_in, structure))
       axioms.toSet
     }
   }
 }
+//TODO
+//double check structure type and get gene iri from jim
+//check java stuff with jim
 
-// object Main extends App {
-//    val source = io.Source.fromFile("source_files/Danio_rerio_expr_simple.tsv")
-////    for (line <- source.getLines) {
-////      println(line)
-////    }
-//    println("done parsing")
-//    val test = BgeeExpressionToOWL.convert(source)
-//    println("done converting")
-//    
-//    //println(test.isEmpty); //how to view items from Set[OWLAxiom]
-////    println(test);
-//    
-//    val file = new File("BgeeResult.txt")
-//    val bw = new BufferedWriter(new FileWriter(file))
-//    bw.write(test.toString())
-//    bw.close()
-//    
-//    source.close();
-//    //convert(source);
-//  }
+ object Main extends App {
+    val source = io.Source.fromFile("source_files/Danio_rerio_expr_simple.tsv")
+//    for (line <- source.getLines) {
+//      println(line)
+//    }
+    println("done parsing")
+    val test = BgeeExpressionToOWL.convert(source)
+    println("done converting")
+    
+    //println(test.isEmpty); //how to view items from Set[OWLAxiom]
+//    println(test);
+    
+    val file = new File("BgeeResult.txt")
+    val bw = new BufferedWriter(new FileWriter(file))
+    bw.write(test.toString())
+    bw.close()
+    
+    source.close();
+    println("done writing results")
+
+    //convert(source);
+  }
+ //TODO
+  //test: compare lines to the input file
+ // test: check total number of declarations
  
-  
+ 
   // each gene within the file has an expression  (each line)
   // respective expression of the gene on that line
   // we need to add expression
@@ -93,3 +99,5 @@ object BgeeExpressionToOWL {
   // 3. anatomical id
   // 4. fact between expression and gene
   // 5. fact between expression and anatomical id
+      
+     
