@@ -133,25 +133,5 @@ object ZFINExpressionToOWL {
   }
 }
 
-// object Main extends App {
-//    val source = io.Source.fromFile("source_files/wildtype-expression_fish.txt")
-////    for (line <- source.getLines) {
-////      println(line)
-////    }
-//    println("done parsing")
-//    val test = ZFINExpressionToOWL.convert(source)
-//    println("done converting")
-//    
-//    //println(test.isEmpty); //how to view items from Set[OWLAxiom]
-////    println(test);
-//    
-//    val file = new File("ZFINresult.txt")
-//    val bw = new BufferedWriter(new FileWriter(file))
-//    bw.write(test.toString())
-//    bw.close()
-//    
-//    source.close();
-//    //convert(source);
-//  }
 
   

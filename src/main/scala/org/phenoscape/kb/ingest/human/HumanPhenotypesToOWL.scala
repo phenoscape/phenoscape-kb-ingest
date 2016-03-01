@@ -44,6 +44,6 @@ object HumanPhenotypesToOWL {
   }
 }
 
-  object test extends App{
-    println("test");
-  }
+//  object test extends App{
+//    println("test");
+//  }
