@@ -1,5 +1,6 @@
 package org.phenoscape.kb.ingest.zfin
 
+import org.phenoscape.owl.PropertyNormalizer
 import scala.collection.JavaConversions._
 import scala.collection.mutable
 import java.io._
@@ -23,7 +24,7 @@ object BgeeExpressionToOWL {
   def translate(expressionLine: String): Set[OWLAxiom] = {
     //    println("======")
     val items = expressionLine.split("\t", -1)
-    if (items(6).startsWith("absent")) { //not too sure about function of this line originally, but it now skips over absent gene expressions
+    if (items(6).startsWith("absent") || items(6).startsWith("Expression")) { //not too sure about function of this line originally, but it now skips over absent gene expressions
       Set.empty
     } else {
       val axioms = mutable.Set.empty[OWLAxiom]
@@ -33,15 +34,15 @@ object BgeeExpressionToOWL {
       val expression = OntologyUtil.nextIndividual()
       //add expression to axiom
       axioms.add(Declaration(expression)) //from this: import org.phenoscape.scowl.Functional._
-      println(Declaration(expression))
+//      println(Declaration(expression))
       //      println(Declaration(expression))
       axioms.add(expression Type GeneExpression) //add expression
-      println(expression Type GeneExpression)
+//      println(expression Type GeneExpression)
       //      println(expression Type GeneExpression)
 
       val structure = OntologyUtil.nextIndividual()
       axioms.add(Declaration(structure))
-      println(Declaration(structure));
+//      println(Declaration(structure));
       
 //      val structureType = Class(OBOUtil.iriForTermID(Option(StringUtils.stripToNull(items(2))).filter(_ != "\\").get)); //http:// create IRI. different prefix?  
 //       println(Class(IRI.create("http://zfin.org/" + Option(StringUtils.stripToNull(items(2))).filter(_ != "\\").get)))//.replaceAll(":", "_"))
@@ -56,19 +57,22 @@ object BgeeExpressionToOWL {
       val term = (Option(StringUtils.stripToNull(items(2))).filter(_ != "\\").get)
       if (term.startsWith("UBERON") || term.startsWith("CL")){
           val structureType = Class(OBOUtil.iriForTermID(Option(StringUtils.stripToNull(items(2))).filter(_ != "\\").get)) //http:// create IRI. different prefix?  
-          println(structureType)
+//          println(structureType)
           axioms.add(structure Type structureType)
-          println(structure Type structureType)
+//          println(structure Type structureType) //TODO: factory for outputting into functional?
 
+      }   
+      else if(term.startsWith("ZFA")){
+          val structureType = Class(IRI.create("http://zfin.org/" + Option(StringUtils.stripToNull(items(2))).filter(_ != "\\").get))
+//          println(structureType)
+          axioms.add(structure Type structureType)
+//          println(structure Type structureType)
+      }
+      else{
+        println("Unprocessed term:");
+        println(term);
       }
       
-      if(term.startsWith("ZFA")){
-          val structureType = Class(IRI.create("http://zfin.org/" + Option(StringUtils.stripToNull(items(2))).filter(_ != "\\").get))
-          println(structureType)
-          axioms.add(structure Type structureType)
-          println(structure Type structureType)
-
-      }
      
 
       val id = "http://identifiers.org/ensembl/" + StringUtils.stripToNull(items(0))
@@ -79,10 +83,10 @@ object BgeeExpressionToOWL {
       axioms.add(Declaration(gene))
 
       axioms.add(expression Fact (associated_with_gene, gene))
-            println(expression Fact (associated_with_gene, gene))
+//            println(expression Fact (associated_with_gene, gene))
       axioms.add(expression Fact (occurs_in, structure))
-            println(expression Fact (occurs_in, structure))
-            println("----llll")
+//            println(expression Fact (occurs_in, structure))
+//            println("----llll")
       axioms.toSet
     }
   }
@@ -98,39 +102,23 @@ object Main extends App {
   //    }
   println("done parsing")
   val test = BgeeExpressionToOWL.convert(source)
-  println("done converting")
+  val normalized = PropertyNormalizer.normalize(test)
+ 
+//  println("done converting")
+//  println(next)
 
   //println(test.isEmpty); //how to view items from Set[OWLAxiom]
   //    println(test);
 
-  val file = new File("BgeeResult.txt")
+  val file = new File("BgeeResult2.txt")
   val bw = new BufferedWriter(new FileWriter(file))
-  bw.write(test.toString())
+  bw.write(normalized.toString())
   bw.close()
 
   source.close();
   println("done writing results")
-
-  //convert(source);
 }
- //TODO
-  //test: compare lines to the input file
- // test: check total number of declarations
+
+//classassertion asserting individual to a class 
  
- 
-  // each gene within the file has an expression  (each line)
-  // respective expression of the gene on that line
-  // we need to add expression
-  // we need to add gene
-  // then need to add fact associated with gene and the anatomical id 
-  // relate expression to the gene
-  // relate gene to anatomical structure (expressed in the anatomical structure)
-  // link expression to the anatomical structure and then link expression to the gene as well
-  
-  // 1. gene expression
-  // 2. gene
-  // 3. anatomical id
-  // 4. fact between expression and gene
-  // 5. fact between expression and anatomical id
-      
      
