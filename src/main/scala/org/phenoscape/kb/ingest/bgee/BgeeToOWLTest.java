@@ -31,20 +31,17 @@ import org.semanticweb.owlapi.model.UnloadableImportException;
 
 
 public class BgeeToOWLTest {
-	private static final int digitAccuracy = 10;
-
 	public static final String danio_rerio = "/Danio_rerio_expr_simple.tsv";
 	public static final String sourceDirectory = "/source_files";
 	public static final String results = "/BgeeResult.txt";
 
 	@Test
 	public void testNumAxioms() {
-
+		//TODO: fix
 		String absPath = new File("").getAbsolutePath();
 		String filePath = absPath + sourceDirectory + danio_rerio;
 		String filePathResults = absPath + results;
 		System.out.println(filePath);
-//		BgeeExpressionToOWLJava.convert(filePath);
 
 		int numExpressions = 0;
 
@@ -66,7 +63,6 @@ public class BgeeToOWLTest {
 		int length = 0;
 		BufferedReader results;
 		try {
-			// int counter = 0;
 			results = new BufferedReader(new FileReader(filePathResults));
 			String line = results.readLine();
 			String[] str = line.split(",");
@@ -76,28 +72,6 @@ public class BgeeToOWLTest {
 			e.printStackTrace();
 		}
 		assertEquals("Number of expressions match", length, numExpressions * 5);
-
-		// set should match
-		// write down what you expect to get in manchester or functional syntax
-		// read in the file through the owl api and the set that results from
-		// the code that you're testing and the sets of axioms should appear
-		// identical
-		// use the owl api on 5 cases....
-
-		// put that in writing of owl, functional, or manchester syntax, then
-		// you should know what to expect from the parse compared to what we
-		// have now.
-
-		// if the owl api changes it will screw up the test
-		// the order that the owl api will write out axioms is not
-		// deterministic.
-
-		// reading a set of axioms through the owl api
-		// ask for review of the output from jim.
-
-		// next: MGI?
-
-		// checkout: mice file, Xenopus tropicalis
 	}
 
 	@Test // TODO: make into a scala test
@@ -128,23 +102,14 @@ public class BgeeToOWLTest {
 		// contents into the ontology.
 		try (final InputStream in = new ByteArrayInputStream(expectedContent.getBytes())) {
 			parser.parse(new StreamDocumentSource(in), ontology);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (OWLParserException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (OWLOntologyChangeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnloadableImportException e) {
+		} catch (IOException|OWLParserException|OWLOntologyChangeException|UnloadableImportException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		//TODO: make test file
 		String filePath = "source_files/Danio_test.txt";
-		Set<OWLAxiom> testSet = BgeeExpressionToOWLJava.convert(filePath);
+		Set<OWLAxiom> testSet = BgeeExpressionToOWL.convert(BgeeExpressionToOWL.strToSource(filePath));
 		
 		System.out.println();
 		
@@ -166,6 +131,8 @@ public class BgeeToOWLTest {
 //				assertEquals(test, "test");
 //				assertEquals(axiom.toString(), "Declaration(NamedIndividual(<http://purl.org/phenoscape/uuid/ba73f965-1822-4a11-a8c5-e1e62bf9f1b3>))");
 //System.out.println("---");
+//			if (i == 3)
+//				assertEquals(axiom.toString(), "ClassAssertion(<http://purl.obolibrary.org/obo/GO_0010467> <http://purl.org/phenoscape/uuid/d5e97fca-9d28-41ec-a27e-8fdb7810ebb3>)");
 			
 			//TODO: gets a didfferent UUID each time
 		}

@@ -19,6 +19,10 @@ import org.semanticweb.owlapi.model.IRI
 
 object BgeeExpressionToOWL {
 
+  def strToSource(str: String): Source = {
+      io.Source.fromFile(str)
+  }
+   
   def convert(expressionData: Source): Set[OWLAxiom] = expressionData.getLines.flatMap(translate).toSet[OWLAxiom]
 
   def translate(expressionLine: String): Set[OWLAxiom] = {
@@ -34,10 +38,10 @@ object BgeeExpressionToOWL {
       val expression = OntologyUtil.nextIndividual()
       //add expression to axiom
       axioms.add(Declaration(expression)) //from this: import org.phenoscape.scowl.Functional._
-//      println(Declaration(expression))
-      //      println(Declaration(expression))
+      println(Declaration(expression))
+            println(Declaration(expression))
       axioms.add(expression Type GeneExpression) //add expression
-//      println(expression Type GeneExpression)
+      println(expression Type GeneExpression)
       //      println(expression Type GeneExpression)
 
       val structure = OntologyUtil.nextIndividual()
@@ -59,14 +63,14 @@ object BgeeExpressionToOWL {
           val structureType = Class(OBOUtil.iriForTermID(Option(StringUtils.stripToNull(items(2))).filter(_ != "\\").get)) //http:// create IRI. different prefix?  
 //          println(structureType)
           axioms.add(structure Type structureType)
-//          println(structure Type structureType) //TODO: factory for outputting into functional?
+          println(structure Type structureType) //TODO: factory for outputting into functional?
 
       }   
       else if(term.startsWith("ZFA")){
           val structureType = Class(IRI.create("http://zfin.org/" + Option(StringUtils.stripToNull(items(2))).filter(_ != "\\").get))
 //          println(structureType)
           axioms.add(structure Type structureType)
-//          println(structure Type structureType)
+          println(structure Type structureType)
       }
       else{
         println("Unprocessed term:");
@@ -74,7 +78,7 @@ object BgeeExpressionToOWL {
       }
       
      
-
+//TODO: Declaration(NamedIndividual(<http://zfin.org/brpf1ENSDARG00000000001>))
       val id = "http://identifiers.org/ensembl/" + StringUtils.stripToNull(items(0))
       //      val geneIRI = new IRI("http://identifiers.org/ensembl/", StringUtils.stripToNull(items(0)))
       val geneIRI = IRI.create(id)
@@ -86,7 +90,7 @@ object BgeeExpressionToOWL {
 //            println(expression Fact (associated_with_gene, gene))
       axioms.add(expression Fact (occurs_in, structure))
 //            println(expression Fact (occurs_in, structure))
-//            println("----llll")
+            println("----llll")
       axioms.toSet
     }
   }
@@ -96,11 +100,12 @@ object BgeeExpressionToOWL {
 //check java stuff with jim
 
 object Main extends App {
-  val source = io.Source.fromFile("source_files/Danio_rerio_expr_simple.tsv")
+//  val source = io.Source.fromFile("source_files/Danio_rerio_expr_simple.tsv")
   //    for (line <- source.getLines) {
   //      println(line)
   //    }
   println("done parsing")
+  val source = BgeeExpressionToOWL.strToSource("source_files/Danio_rerio_expr_simple.tsv");
   val test = BgeeExpressionToOWL.convert(source)
   val normalized = PropertyNormalizer.normalize(test)
  
@@ -110,6 +115,7 @@ object Main extends App {
   //println(test.isEmpty); //how to view items from Set[OWLAxiom]
   //    println(test);
 
+  
   val file = new File("BgeeResult2.txt")
   val bw = new BufferedWriter(new FileWriter(file))
   bw.write(normalized.toString())
