@@ -9,7 +9,7 @@ import org.phenoscape.owl.Vocab._
 import org.phenoscape.owl.util.OBOUtil
 import org.phenoscape.owl.util.OntologyUtil
 import org.phenoscape.scowl.Functional._
-import org.phenoscape.scowl.OWL._
+import org.phenoscape.scowl._
 import org.semanticweb.owlapi.model.OWLAxiom
 
 object MGIPhenotypesToOWL {

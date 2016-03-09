@@ -7,7 +7,7 @@ import scala.io.Source
 import org.apache.commons.lang3.StringUtils
 import org.phenoscape.owl.Vocab._
 import org.phenoscape.scowl.Functional._
-import org.phenoscape.scowl.OWL._
+import org.phenoscape.scowl._
 import org.semanticweb.owlapi.apibinding.OWLManager
 import org.semanticweb.owlapi.model.IRI
 import org.semanticweb.owlapi.model.OWLAxiom
