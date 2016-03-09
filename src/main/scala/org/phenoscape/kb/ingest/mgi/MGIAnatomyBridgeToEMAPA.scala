@@ -6,7 +6,7 @@ import scala.collection.JavaConversions._
 import scala.io.Source
 
 import org.apache.commons.lang3.StringUtils
-import org.phenoscape.owl.util.OBOUtil
+import org.phenoscape.kb.ingest.util.OBOUtil
 import org.phenoscape.scowl.Functional._
 import org.phenoscape.scowl._
 import org.semanticweb.owlapi.apibinding.OWLManager

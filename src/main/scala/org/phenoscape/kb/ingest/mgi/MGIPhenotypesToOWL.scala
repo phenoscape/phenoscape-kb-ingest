@@ -4,10 +4,10 @@ import scala.collection.mutable
 import scala.io.Source
 
 import org.apache.commons.lang3.StringUtils
-import org.phenoscape.owl.Vocab
-import org.phenoscape.owl.Vocab._
-import org.phenoscape.owl.util.OBOUtil
-import org.phenoscape.owl.util.OntologyUtil
+import org.phenoscape.kb.ingest.util.Vocab
+import org.phenoscape.kb.ingest.util.Vocab._
+import org.phenoscape.kb.ingest.util.OBOUtil
+import org.phenoscape.kb.ingest.util.OntUtil
 import org.phenoscape.scowl.Functional._
 import org.phenoscape.scowl._
 import org.semanticweb.owlapi.model.OWLAxiom
@@ -21,7 +21,7 @@ object MGIPhenotypesToOWL {
   def translate(expressionLine: String): Set[OWLAxiom] = {
     val items = expressionLine.split("\t", -1)
     val axioms = mutable.Set.empty[OWLAxiom]
-    val phenotype = OntologyUtil.nextIndividual()
+    val phenotype = OntUtil.nextIndividual()
     axioms.add(phenotype Type AnnotatedPhenotype)
     axioms.add(Declaration(phenotype))
     val phenotypeID = StringUtils.stripToNull(items(10))

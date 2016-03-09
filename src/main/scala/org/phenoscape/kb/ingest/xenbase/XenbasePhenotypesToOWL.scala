@@ -4,11 +4,11 @@ import scala.collection.Map
 import scala.io.Source
 
 import org.apache.commons.lang3.StringUtils
-import org.phenoscape.owl.Vocab
-import org.phenoscape.owl.Vocab._
-import org.phenoscape.owl.util.ExpressionUtil
-import org.phenoscape.owl.util.OBOUtil
-import org.phenoscape.owl.util.OntologyUtil
+import org.phenoscape.kb.ingest.util.Vocab
+import org.phenoscape.kb.ingest.util.Vocab._
+import org.phenoscape.kb.ingest.util.ExpressionUtil
+import org.phenoscape.kb.ingest.util.OBOUtil
+import org.phenoscape.kb.ingest.util.OntUtil
 import org.phenoscape.scowl.Functional._
 import org.phenoscape.scowl._
 import org.semanticweb.owlapi.model.OWLAxiom
@@ -25,7 +25,7 @@ object XenbasePhenotypesToOWL {
     val items = annotationLine.split("\t")
     val geneText = StringUtils.stripToNull(items(11))
     if (geneText != null) {
-      val phenotype = OntologyUtil.nextIndividual()
+      val phenotype = OntUtil.nextIndividual()
       val sourceText = StringUtils.stripToNull(items(0)).toUpperCase
       val source = if (sourceText.contains("IMG")) Individual(OBOUtil.xenbaseImageIRI(sourceText))
       else Individual(OBOUtil.xenbaseArticleIRI(sourceText))
@@ -35,7 +35,7 @@ object XenbasePhenotypesToOWL {
       val qualityLabel = StringUtils.stripToEmpty(items(16))
       val (entity, entityAxioms) = OBOUtil.translatePostCompositionNamed(StringUtils.stripToNull(items(13)))
       val entityLabel = StringUtils.stripToEmpty(items(14))
-      val (optionalRelatedEntity, relatedEntityAxioms) = OntologyUtil.optionWithSet(Option(StringUtils.stripToNull(items(17))).map(OBOUtil.translatePostCompositionNamed))
+      val (optionalRelatedEntity, relatedEntityAxioms) = optionWithSet(Option(StringUtils.stripToNull(items(17))).map(OBOUtil.translatePostCompositionNamed))
       val relatedEntityLabel = Option(StringUtils.stripToNull(items(18))).map(re => s" towards $re").getOrElse("")
       val phenotypeLabel = s"$qualityLabel: $entityLabel$relatedEntityLabel"
       val eqPhenotype = (entity, quality, optionalRelatedEntity) match {
@@ -65,5 +65,10 @@ object XenbasePhenotypesToOWL {
   val taxon: Map[String, OWLNamedIndividual] = Map(
     "XBTAXON:0000001" -> tropicalis,
     "XBTAXON:0000002" -> laevis)
+
+  private def optionWithSet[T, S](in: Option[(T, Set[S])]): (Option[T], Set[S]) = in match {
+    case Some((thing, set)) => (Option(thing), set)
+    case None               => (None, Set.empty)
+  }
 
 }
