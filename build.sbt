@@ -31,6 +31,7 @@ libraryDependencies ++= {
 	"org.phenoscape"         %%  "scowl"                  % "0.9.3",
     "org.phenoscape"         %%  "kb-owl-tools"           % "1.4.2",
     "com.github.tototoshi"   %%  "scala-csv"              % "1.2.2",
-    "org.apache.commons"     %   "commons-lang3"          % "3.1"
-  )
+    "org.apache.commons"     %   "commons-lang3"          % "3.1",
+“junit”  %  “junit"  % "4.10" 
+ )
 }

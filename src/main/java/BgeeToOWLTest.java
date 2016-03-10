@@ -1,4 +1,3 @@
-package org.phenoscape.kb.ingest.bgee;
 
 import org.phenoscape.owl.PropertyNormalizer;
 
@@ -28,6 +27,7 @@ import org.semanticweb.owlapi.model.OWLOntologyChangeException;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.UnloadableImportException;
+import org.phenoscape.kb.ingest.bgee.BgeeExpressionToOWL;
 
 public class BgeeToOWLTest {
 	public static final String danio_rerio = "/Danio_rerio_expr_simple.tsv";
@@ -105,14 +105,18 @@ public class BgeeToOWLTest {
 
 		// TODO: make test file
 		String filePath = "source_files/Danio_test.txt";
-		Set<OWLAxiom> testSet = BgeeExpressionToOWL.convert(BgeeExpressionToOWL.strToSource(filePath));
-
+		scala.collection.Set<OWLAxiom> testSet = BgeeExpressionToOWL.convert(BgeeExpressionToOWL.strToSource(filePath));
+		System.out.println("000");
+		Set<OWLAxiom> testJavaSet = scala.collection.JavaConverters.setAsJavaSetConverter(testSet).asJava();
+		System.out.println("001");
 		System.out.println();
-
-		List<OWLAxiom> setToSort = new ArrayList<OWLAxiom>(testSet);
+		System.out.println("002");
+		List<OWLAxiom> setToSort = new ArrayList<OWLAxiom>(testJavaSet);
 		Collections.sort(setToSort);
 		String test = "test";
 		assertEquals(test, "test");
+		
+		System.out.println("test");
 
 		for (int i = 0; i < setToSort.size(); i++) {
 			OWLAxiom axiom = setToSort.get(i);

@@ -1,4 +1,4 @@
-package org.phenoscape.kb.ingest.zfin
+package org.phenoscape.kb.ingest.bgee
 
 import org.phenoscape.owl.PropertyNormalizer
 import scala.collection.JavaConversions._
