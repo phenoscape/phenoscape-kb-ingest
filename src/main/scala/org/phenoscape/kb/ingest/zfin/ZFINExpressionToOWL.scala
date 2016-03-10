@@ -5,12 +5,12 @@ import scala.collection.mutable
 import scala.io.Source
 
 import org.apache.commons.lang3.StringUtils
-import org.phenoscape.owl.Vocab._
-import org.phenoscape.owl.util.ExpressionUtil
-import org.phenoscape.owl.util.OBOUtil
-import org.phenoscape.owl.util.OntologyUtil
+import org.phenoscape.kb.ingest.util.Vocab._
+import org.phenoscape.kb.ingest.util.ExpressionUtil
+import org.phenoscape.kb.ingest.util.OBOUtil
+import org.phenoscape.kb.ingest.util.OntUtil
 import org.phenoscape.scowl.Functional._
-import org.phenoscape.scowl.OWL._
+import org.phenoscape.scowl._
 import org.semanticweb.owlapi.model.OWLAxiom
 
 object ZFINExpressionToOWL {
@@ -62,12 +62,12 @@ object ZFINExpressionToOWL {
       // Example OWL that would be generated is provided in comments
       val axioms = mutable.Set.empty[OWLAxiom]
       // Individual: uuid:3e1ad895-56b2-4b54-a3f8-c99e7b42f646
-      val expression = OntologyUtil.nextIndividual()
+      val expression = OntUtil.nextIndividual()
       axioms.add(Declaration(expression))
       // Individual: uuid:3e1ad895-56b2-4b54-a3f8-c99e7b42f646
       //     Types: GO:0010467
       axioms.add(expression Type GeneExpression)
-      val structure = OntologyUtil.nextIndividual()
+      val structure = OntUtil.nextIndividual()
       // Individual: uuid:033ab9ee-e20a-4049-8780-24c422bb3c90
       axioms.add(Declaration(structure))
       // Individual: uuid:3e1ad895-56b2-4b54-a3f8-c99e7b42f646
