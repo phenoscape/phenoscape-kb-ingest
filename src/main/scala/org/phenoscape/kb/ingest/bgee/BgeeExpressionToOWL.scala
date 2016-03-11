@@ -26,7 +26,7 @@ object BgeeExpressionToOWL {
   def convert(expressionData: Source): Set[OWLAxiom] = expressionData.getLines.flatMap(translate).toSet[OWLAxiom]
 
   def translate(expressionLine: String): Set[OWLAxiom] = {
-    //    println("======")
+    println("====== translate ======")
     val items = expressionLine.split("\t", -1)
     if (items(6).startsWith("absent") || items(6).startsWith("Expression")) { //not too sure about function of this line originally, but it now skips over absent gene expressions
       Set.empty

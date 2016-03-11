@@ -18,7 +18,7 @@ You must have the [sbteclipse](https://github.com/typesafehub/sbteclipse) plugin
 
 In the project directory, run `sbt eclipse`. In Eclipse, choose File > Import... > Existing Projects into Workspace. After any change to `build.sbt`, run `sbt eclipse` and refresh the project in Eclipse.
 
-## Obtaing the legacy history for this repository
+## Obtaining the legacy history for this repository
 
 The code in this repo was initially split off from the
 [Phenoscape/phenoscape-owl-tools] repository. The relevant legacy history

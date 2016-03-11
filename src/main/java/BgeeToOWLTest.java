@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.coode.owlapi.manchesterowlsyntax.ManchesterOWLSyntaxParserFactory;
@@ -75,6 +74,7 @@ public class BgeeToOWLTest {
 
 	@Test // TODO: make into a scala test
 	public void testAccuracy() {
+		System.out.println("============= Test Accuracy ==============");
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology ontology = null;
 		try {
@@ -106,17 +106,18 @@ public class BgeeToOWLTest {
 		// TODO: make test file
 		String filePath = "source_files/Danio_test.txt";
 		scala.collection.Set<OWLAxiom> testSet = BgeeExpressionToOWL.convert(BgeeExpressionToOWL.strToSource(filePath));
-		System.out.println("000");
+//		System.out.println("000");
 		Set<OWLAxiom> testJavaSet = scala.collection.JavaConverters.setAsJavaSetConverter(testSet).asJava();
-		System.out.println("001");
-		System.out.println();
-		System.out.println("002");
+//		System.out.println("001");
+//		System.out.println();
+		System.out.println("testtttasdfasdfadfasdf");
+//		System.out.println("002");
 		List<OWLAxiom> setToSort = new ArrayList<OWLAxiom>(testJavaSet);
 		Collections.sort(setToSort);
 		String test = "test";
 		assertEquals(test, "test");
 		
-		System.out.println("test");
+		System.out.println("set to sort axioms");
 
 		for (int i = 0; i < setToSort.size(); i++) {
 			OWLAxiom axiom = setToSort.get(i);
@@ -130,10 +131,10 @@ public class BgeeToOWLTest {
 			// break;
 			// }
 			// System.out.println("now test");
-			// if (i == 0)
-			// assertEquals(test, "test");
-			// assertEquals(axiom.toString(),
-			// "Declaration(NamedIndividual(<http://purl.org/phenoscape/uuid/ba73f965-1822-4a11-a8c5-e1e62bf9f1b3>))");
+//			 if (i == 0){
+//			 assertEquals(test, "test");
+//			 assertEquals(axiom.toString(),
+//			 "Declaration(NamedIndividual(<http://purl.org/phenoscape/uuid/ba73f965-1822-4a11-a8c5-e1e62bf9f1b3>))");
 			// System.out.println("---");
 			// if (i == 3)
 			// assertEquals(axiom.toString(),

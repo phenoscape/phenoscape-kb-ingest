@@ -6,12 +6,12 @@ import scala.collection.mutable
 import scala.io.Source
 
 import org.apache.commons.lang3.StringUtils
-import org.phenoscape.owl.Vocab
-import org.phenoscape.owl.Vocab._
-import org.phenoscape.owl.util.OBOUtil
-import org.phenoscape.owl.util.OntologyUtil
+import org.phenoscape.kb.ingest.util.Vocab
+import org.phenoscape.kb.ingest.util.Vocab._
+import org.phenoscape.kb.ingest.util.OBOUtil
+import org.phenoscape.kb.ingest.util.OntUtil
 import org.phenoscape.scowl.Functional._
-import org.phenoscape.scowl.OWL._
+import org.phenoscape.scowl._
 import org.semanticweb.owlapi.model.OWLAxiom
 import org.semanticweb.owlapi.model.OWLNamedIndividual
 
@@ -52,14 +52,14 @@ object XenbaseExpressionToOWL {
       Set.empty
     } else {
       val axioms = mutable.Set.empty[OWLAxiom]
-      val expression = OntologyUtil.nextIndividual()
+      val expression = OntUtil.nextIndividual()
       axioms.add(Declaration(expression))
       axioms.add(expression Type GeneExpression)
       val structureItems = items(3).split(",", -1)
       for (structureItem <- structureItems) {
         val structureID = StringUtils.stripToNull(structureItem.trim().split(" ")(0))
         val structureType = Class(OBOUtil.iriForTermID(structureID))
-        val structure = OntologyUtil.nextIndividual()
+        val structure = OntUtil.nextIndividual()
         axioms.add(Declaration(structure))
         axioms.add(structure Type structureType)
         axioms.add(expression Fact (occurs_in, structure))

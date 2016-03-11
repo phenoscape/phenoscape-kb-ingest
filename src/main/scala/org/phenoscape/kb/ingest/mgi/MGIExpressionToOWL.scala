@@ -4,12 +4,12 @@ import scala.collection.mutable
 import scala.io.Source
 
 import org.apache.commons.lang3.StringUtils
-import org.phenoscape.owl.Vocab
-import org.phenoscape.owl.Vocab._
-import org.phenoscape.owl.util.OBOUtil
-import org.phenoscape.owl.util.OntologyUtil
+import org.phenoscape.kb.ingest.util.Vocab
+import org.phenoscape.kb.ingest.util.Vocab._
+import org.phenoscape.kb.ingest.util.OBOUtil
+import org.phenoscape.kb.ingest.util.OntUtil
 import org.phenoscape.scowl.Functional._
-import org.phenoscape.scowl.OWL._
+import org.phenoscape.scowl._
 import org.semanticweb.owlapi.apibinding.OWLManager
 import org.semanticweb.owlapi.model.OWLAxiom
 
@@ -29,10 +29,10 @@ object MGIExpressionToOWL {
       Set.empty
     } else {
       val axioms = mutable.Set.empty[OWLAxiom]
-      val expression = OntologyUtil.nextIndividual()
+      val expression = OntUtil.nextIndividual()
       axioms.add(Declaration(expression))
       axioms.add(expression Type GeneExpression)
-      val structure = OntologyUtil.nextIndividual()
+      val structure = OntUtil.nextIndividual()
       axioms.add(Declaration(structure))
       axioms.add(expression Fact (occurs_in, structure))
       val structureID = StringUtils.stripToNull(items(4))

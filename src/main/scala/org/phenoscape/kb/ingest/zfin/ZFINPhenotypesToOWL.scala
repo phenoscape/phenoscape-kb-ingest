@@ -5,13 +5,12 @@ import scala.collection.mutable
 import scala.io.Source
 
 import org.apache.commons.lang3.StringUtils
-import org.apache.log4j.Logger
-import org.phenoscape.owl.Vocab._
-import org.phenoscape.owl.util.ExpressionUtil
-import org.phenoscape.owl.util.OBOUtil
-import org.phenoscape.owl.util.OntologyUtil
+import org.phenoscape.kb.ingest.util.Vocab._
+import org.phenoscape.kb.ingest.util.ExpressionUtil
+import org.phenoscape.kb.ingest.util.OBOUtil
+import org.phenoscape.kb.ingest.util.OntUtil
 import org.phenoscape.scowl.Functional._
-import org.phenoscape.scowl.OWL._
+import org.phenoscape.scowl._
 import org.semanticweb.owlapi.model.IRI
 import org.semanticweb.owlapi.model.OWLAxiom
 import org.semanticweb.owlapi.model.OWLClass
@@ -23,7 +22,7 @@ object ZFINPhenotypesToOWL {
   def translate(expressionLine: String): Set[OWLAxiom] = {
     val items = expressionLine.split("\t")
     val axioms = mutable.Set[OWLAxiom]()
-    val phenotype = OntologyUtil.nextIndividual()
+    val phenotype = OntUtil.nextIndividual()
     axioms.add(phenotype Type AnnotatedPhenotype)
     axioms.add(Declaration(phenotype))
     val superStructureID = StringUtils.stripToNull(items(7))
@@ -65,18 +64,15 @@ object ZFINPhenotypesToOWL {
       namedComposition
     }
     val eq_phenotype = (entityTerm, qualityTerm, relatedEntityTerm) match {
-      case (null, null, _)                => null
+      case (null, null, _) => null
       case (entity: OWLClass, null, null) => has_part some (Present and (inheres_in some entity))
-      case (entity: OWLClass, null, relatedEntity: OWLClass) => {
-        logger.warn("Related entity with no quality.")
-        has_part some (Present and (inheres_in some entity) and (towards some relatedEntity))
-      }
-      case (entity: OWLClass, Absent, null)                                 => has_part some (LacksAllPartsOfType and (inheres_in some MultiCellularOrganism) and (towards some entity))
+      case (entity: OWLClass, null, relatedEntity: OWLClass) => has_part some (Present and (inheres_in some entity) and (towards some relatedEntity))
+      case (entity: OWLClass, Absent, null) => has_part some (LacksAllPartsOfType and (inheres_in some MultiCellularOrganism) and (towards some entity))
       case (entity: OWLClass, LacksAllPartsOfType, relatedEntity: OWLClass) => has_part some (LacksAllPartsOfType and (inheres_in some entity) and (towards some relatedEntity))
-      case (null, quality: OWLClass, null)                                  => has_part some quality
-      case (null, quality: OWLClass, relatedEntity: OWLClass)               => has_part some (quality and (towards some relatedEntity))
-      case (entity: OWLClass, quality: OWLClass, null)                      => has_part some (quality and (inheres_in some entity))
-      case (entity: OWLClass, quality: OWLClass, relatedEntity: OWLClass)   => has_part some (quality and (inheres_in some entity) and (towards some relatedEntity))
+      case (null, quality: OWLClass, null) => has_part some quality
+      case (null, quality: OWLClass, relatedEntity: OWLClass) => has_part some (quality and (towards some relatedEntity))
+      case (entity: OWLClass, quality: OWLClass, null) => has_part some (quality and (inheres_in some entity))
+      case (entity: OWLClass, quality: OWLClass, relatedEntity: OWLClass) => has_part some (quality and (inheres_in some entity) and (towards some relatedEntity))
     }
     if (eq_phenotype != null) {
       axioms.add(Declaration(MultiCellularOrganism))
@@ -96,7 +92,5 @@ object ZFINPhenotypesToOWL {
     axioms.add(phenotype Fact (dcSource, figure))
     axioms.toSet
   }
-
-  private lazy val logger = Logger.getLogger(this.getClass)
 
 }
