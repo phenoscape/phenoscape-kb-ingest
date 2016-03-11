@@ -1,6 +1,5 @@
 package org.phenoscape.kb.ingest.bgee
 
-import org.phenoscape.owl.PropertyNormalizer
 import scala.collection.JavaConversions._
 import scala.collection.mutable
 import java.io._
@@ -8,11 +7,11 @@ import scala.io.Source
 import org.phenoscape.scowl.Functional._
 
 import org.apache.commons.lang3.StringUtils
-import org.phenoscape.owl.Vocab._
-import org.phenoscape.owl.util.ExpressionUtil
-import org.phenoscape.owl.util.OBOUtil
-import org.phenoscape.owl.util.OntologyUtil
-import org.phenoscape.scowl.OWL._
+import org.phenoscape.kb.ingest.util.Vocab._
+import org.phenoscape.kb.ingest.util.ExpressionUtil
+import org.phenoscape.kb.ingest.util.OBOUtil
+import org.phenoscape.kb.ingest.util.OntUtil
+import org.phenoscape.scowl._
 import org.semanticweb.owlapi.model.OWLAxiom
 import org.semanticweb.owlapi.model.IRI
 
@@ -35,7 +34,7 @@ object BgeeExpressionToOWL {
       val geneID = StringUtils.stripToNull(items(0))
       val anatomicalID = StringUtils.stripToNull(items(2))
 
-      val expression = OntologyUtil.nextIndividual()
+      val expression = OntUtil.nextIndividual()
       //add expression to axiom
       axioms.add(Declaration(expression)) //from this: import org.phenoscape.scowl.Functional._
       println(Declaration(expression))
@@ -44,7 +43,7 @@ object BgeeExpressionToOWL {
       println(expression Type GeneExpression)
       //      println(expression Type GeneExpression)
 
-      val structure = OntologyUtil.nextIndividual()
+      val structure = OntUtil.nextIndividual()
       axioms.add(Declaration(structure))
 //      println(Declaration(structure));
       
@@ -107,7 +106,6 @@ object Main extends App {
   println("done parsing")
   val source = BgeeExpressionToOWL.strToSource("source_files/Danio_rerio_expr_simple.tsv");
   val test = BgeeExpressionToOWL.convert(source)
-  val normalized = PropertyNormalizer.normalize(test)
  
 //  println("done converting")
 //  println(next)
@@ -118,7 +116,7 @@ object Main extends App {
   
   val file = new File("BgeeResult2.txt")
   val bw = new BufferedWriter(new FileWriter(file))
-  bw.write(normalized.toString())
+  bw.write(test.toString())
   bw.close()
 
   source.close();

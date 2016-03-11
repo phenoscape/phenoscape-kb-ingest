@@ -7,9 +7,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.phenoscape.owl.Vocab;
-import org.phenoscape.owl.util.OntologyUtil;
-//import org.phenoscape.owl.util.OntologyUtil;
+import org.phenoscape.kb.ingest.util.Vocab;
+import org.phenoscape.kb.ingest.util.OntUtil;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import uk.ac.manchester.cs.owl.owlapi.OWLDataFactoryImpl;
@@ -32,7 +31,7 @@ public class BgeeExpressionToOWLJava {
 		for (String str : geneToAnatomyMap.keySet()) {
 			OWLDataFactoryImpl factory = new OWLDataFactoryImpl();
 
-			OWLNamedIndividual expression = OntologyUtil.nextIndividual();
+			OWLNamedIndividual expression = OntUtil.nextIndividual();
 			axioms.add(factory.getOWLDeclarationAxiom(expression));
 			axioms.add(factory.getOWLClassAssertionAxiom(Vocab.GeneExpression(), expression)); // axioms.add(expression
 																								// Type
@@ -46,7 +45,7 @@ public class BgeeExpressionToOWLJava {
 																// for gene
 
 			// add anatomical ID
-			OWLNamedIndividual structure = OntologyUtil.nextIndividual();
+			OWLNamedIndividual structure = OntUtil.nextIndividual();
 			axioms.add(factory.getOWLDeclarationAxiom(structure)); // TODO: does
 																	// this need
 																	// to be
