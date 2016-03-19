@@ -1,5 +1,4 @@
 
-import org.phenoscape.owl.PropertyNormalizer;
 
 import static org.junit.Assert.*;
 
