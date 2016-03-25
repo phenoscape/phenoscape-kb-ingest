@@ -24,9 +24,9 @@ object BgeeExpressionToOWL {
   def convert(expressionData: Source): Set[OWLAxiom] = expressionData.getLines.flatMap(translate).toSet[OWLAxiom]
 
   def translate(expressionLine: String): Set[OWLAxiom] = {
-//    println("====== translate ======")
+    //    println("====== translate ======")
     val items = expressionLine.split("\t", -1)
-//    println(items(2))
+    //    println(items(2))
     if (items(6).startsWith("absent") || items(6).startsWith("Expression")) { //not too sure about function of this line originally, but it now skips over absent gene expressions
       Set.empty
     } else {
@@ -37,25 +37,25 @@ object BgeeExpressionToOWL {
       val expression = OntUtil.nextIndividual()
       //add expression to axiom
       axioms.add(Declaration(expression)) //from this: import org.phenoscape.scowl.Functional._
-//      println(Declaration(expression)) // randomized
+      //      println(Declaration(expression)) // randomized
       axioms.add(expression Type GeneExpression) //add expression
-//      println(expression Type GeneExpression)
+      //      println(expression Type GeneExpression)
       //      println(expression Type GeneExpression)
 
       val structure = OntUtil.nextIndividual()
       axioms.add(Declaration(structure))
-//      println(Declaration(structure)); //random
+      //      println(Declaration(structure)); //random
 
       val term = (Option(StringUtils.stripToNull(items(2))).filter(_ != "\\").get)
       if (term.startsWith("UBERON") || term.startsWith("CL")) {
         val structureType = Class(OBOUtil.iriForTermID(Option(StringUtils.stripToNull(items(2))).filter(_ != "\\").get)) //http:// create IRI. different prefix?  
         axioms.add(structure Type structureType)
-//        println(structure Type structureType) //TODO: factory for outputting into functional?
+        //        println(structure Type structureType) //TODO: factory for outputting into functional?
 
       } else if (term.startsWith("ZFA")) {
         val structureType = Class(IRI.create("http://zfin.org/" + Option(StringUtils.stripToNull(items(2))).filter(_ != "\\").get))
         axioms.add(structure Type structureType)
-//        println(structure Type structureType)
+        //        println(structure Type structureType)
       } else {
         println("Unprocessed term:");
         println(term);
@@ -68,12 +68,12 @@ object BgeeExpressionToOWL {
       //      val geneIRI = OBOUtil.zfinIRI(StringUtils.stripToNull(items(0)))
       val gene = Individual(geneIRI)
       axioms.add(Declaration(gene))
-//      println(Declaration(gene))
+      //      println(Declaration(gene))
       axioms.add(expression Fact (associated_with_gene, gene))
-//      println(expression Fact (associated_with_gene, gene))
+      //      println(expression Fact (associated_with_gene, gene))
       axioms.add(expression Fact (occurs_in, structure))
-//      println(expression Fact (occurs_in, structure))
-//      println("----done")
+      //      println(expression Fact (occurs_in, structure))
+      //      println("----done")
       axioms.toSet
     }
   }

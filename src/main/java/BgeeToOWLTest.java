@@ -18,15 +18,13 @@ import org.phenoscape.kb.ingest.bgee.BgeeExpressionToOWL;
 
 public class BgeeToOWLTest {
 	public static final String sourceDirectory = "/source_files";
-//	public static final String danio_rerio = "/Danio_rerio_expr_simple.tsv";
-	public static final String danio_test = "/Danio_rerio_expr_simple.tsv";
-	
+	public static final String danio_rerio = "/Danio_rerio_expr_simple.tsv";
+
 	private static final String expressionPrefix = "http://purl.org/phenoscape/uuid/";
 	private static final String DECLARATION_STR = "Declaration";
 	private static final String CLASSASSERTION_STR = "ClassAssertion";
 	private static final String OBJECTPROPERTYASSERTION_STR = "ObjectPropertyAssertion";
 
-	// public static final String results = "/BgeeResult.txt";
 	String testPath;
 	int uniqueGeneIDs;
 	Set<OWLAxiom> owlAxiomSet;
@@ -34,8 +32,8 @@ public class BgeeToOWLTest {
 	@Before
 	public void setUp() {
 		String absPath = new File("").getAbsolutePath();
-		testPath = absPath + sourceDirectory + danio_test;
-		
+		testPath = absPath + sourceDirectory + danio_rerio;
+
 		scala.collection.Set<OWLAxiom> testSet = BgeeExpressionToOWL.convert(BgeeExpressionToOWL.strToSource(testPath));
 		System.out.println("UnitTest: Finished creating OWLAxiom test set");
 		owlAxiomSet = scala.collection.JavaConverters.setAsJavaSetConverter(testSet).asJava();
@@ -63,7 +61,7 @@ public class BgeeToOWLTest {
 				} else {
 					duplicates++;
 				}
-				line = input.readLine(); // TODO: read next line
+				line = input.readLine();
 			}
 			input.close();
 		} catch (IOException e) {
@@ -72,14 +70,12 @@ public class BgeeToOWLTest {
 		assertEquals("Number of expressions match", owlAxiomSet.size(), numExpressions * 7 - duplicates);
 	}
 
-	
 	/**
-	 * Checks that each expression (beginning with "http://purl.org/phenoscape/uuid/") occurs 
-	 * 1x within a Declaration
-	 * 1x within a ClassAssertion
-	 * 2x within an ObjectPropertyAssertion
+	 * Checks that each expression (beginning with
+	 * "http://purl.org/phenoscape/uuid/") occurs 1x within a Declaration 1x
+	 * within a ClassAssertion 2x within an ObjectPropertyAssertion
 	 */
-	@Test // TODO: make into a scala test
+	@Test
 	public void testAccuracy() {
 		List<OWLAxiom> setToSort = new ArrayList<OWLAxiom>(owlAxiomSet);
 		Collections.sort(setToSort);
@@ -87,38 +83,36 @@ public class BgeeToOWLTest {
 		Set<String> declaration = new HashSet<String>();
 		Set<String> classAssertion = new HashSet<String>();
 		Map<String, Integer> objectPropertyAssertion = new HashMap<String, Integer>();
-		
+
 		for (OWLAxiom axiom : setToSort) {
 			String axiomStr = axiom.toString();
-			if (axiomStr.contains(DECLARATION_STR)){
-				if(axiomStr.contains(expressionPrefix)){
+			if (axiomStr.contains(DECLARATION_STR)) {
+				if (axiomStr.contains(expressionPrefix)) {
 					int start = axiomStr.indexOf("<");
 					int end = axiomStr.indexOf(">");
 					String expression = axiomStr.substring(start + 1, end);
 					assertTrue(!declaration.contains(expression));
 					declaration.add(expression);
 				}
-			}
-			else if(axiomStr.contains(CLASSASSERTION_STR)){
+			} else if (axiomStr.contains(CLASSASSERTION_STR)) {
 				int prefixStart = axiomStr.indexOf(expressionPrefix);
 				int end = axiomStr.indexOf(">", prefixStart);
 				String expression = axiomStr.substring(prefixStart, end);
 				assertTrue(!classAssertion.contains(expression));
 				classAssertion.add(expression);
-			}
-			else if(axiomStr.contains(OBJECTPROPERTYASSERTION_STR)){
+			} else if (axiomStr.contains(OBJECTPROPERTYASSERTION_STR)) {
 				int prefixStart = axiomStr.indexOf(expressionPrefix);
 				int end = axiomStr.indexOf(">", prefixStart);
 				String expression = axiomStr.substring(prefixStart, end);
 				if (!objectPropertyAssertion.containsKey(expression))
 					objectPropertyAssertion.put(expression, 1);
-				else{
-					objectPropertyAssertion.put(expression, objectPropertyAssertion.get(expression)+1);
+				else {
+					objectPropertyAssertion.put(expression, objectPropertyAssertion.get(expression) + 1);
 				}
 			}
 		}
 		// check objectPropertyAssertion
-		for (String obj: objectPropertyAssertion.keySet()){
+		for (String obj : objectPropertyAssertion.keySet()) {
 			assertTrue(objectPropertyAssertion.get(obj) == 2);
 		}
 	}
