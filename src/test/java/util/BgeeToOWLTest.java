@@ -1,3 +1,5 @@
+package org.phenoscape.kb.ingest.util;
+
 import static org.junit.Assert.*;
 import java.io.BufferedReader;
 import java.io.File;
@@ -111,7 +113,6 @@ public class BgeeToOWLTest {
 				}
 			}
 		}
-		// check objectPropertyAssertion
 		for (String obj : objectPropertyAssertion.keySet()) {
 			assertTrue(objectPropertyAssertion.get(obj) == 2);
 		}
