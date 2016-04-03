@@ -1,4 +1,4 @@
-package org.phenoscape.kb.ingest.util;
+package org.phenoscape.kb.ingest.javautil;
 
 import static org.junit.Assert.*;
 import java.io.BufferedReader;
@@ -12,30 +12,28 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.phenoscape.kb.ingest.bgee.BgeeExpressionToOWL;
 
 public class BgeeToOWLTest {
-	public static final String sourceDirectory = "/source_files";
-	public static final String danio_rerio = "/Danio_rerio_expr_simple.tsv";
+	public static final String sourceDirectory = "/src/test/resources";
+	public static final String danio_rerio = "/Danio_test.txt";
 
 	private static final String expressionPrefix = "http://purl.org/phenoscape/uuid/";
 	private static final String DECLARATION_STR = "Declaration";
 	private static final String CLASSASSERTION_STR = "ClassAssertion";
 	private static final String OBJECTPROPERTYASSERTION_STR = "ObjectPropertyAssertion";
 
-	String testPath;
+	static String testPath;
 	int uniqueGeneIDs;
-	Set<OWLAxiom> owlAxiomSet;
+	static Set<OWLAxiom> owlAxiomSet;
 
-	@Before
-	public void setUp() {
+	@BeforeClass
+	public static void setUp() {
 		String absPath = new File("").getAbsolutePath();
 		testPath = absPath + sourceDirectory + danio_rerio;
-
 		scala.collection.Set<OWLAxiom> testSet = BgeeExpressionToOWL.convert(BgeeExpressionToOWL.strToSource(testPath));
 		System.out.println("UnitTest: Finished creating OWLAxiom test set");
 		owlAxiomSet = scala.collection.JavaConverters.setAsJavaSetConverter(testSet).asJava();
