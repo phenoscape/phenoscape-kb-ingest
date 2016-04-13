@@ -42,5 +42,8 @@ object HumanPhenotypesToOWL {
     axioms.add(phenotype Fact (associated_with_taxon, human))
     axioms.toSet
   }
-
 }
+
+//  object test extends App{
+//    println("test");
+//  }
