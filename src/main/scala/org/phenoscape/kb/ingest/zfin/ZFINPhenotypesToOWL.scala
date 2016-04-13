@@ -50,7 +50,7 @@ object ZFINPhenotypesToOWL {
     val phenotypeStructureLabel = if (subStructureLabel.isEmpty) superStructureLabel else s"$subStructureLabel of $superStructureLabel"
     val phenotypeRelatedStructureLabel = if (relatedSubStructureLabel.isEmpty) relatedSuperStructureLabel else s"$relatedSubStructureLabel of $relatedSuperStructureLabel"
     val phenotypeSuffix = if (phenotypeRelatedStructureLabel.isEmpty) "" else s" towards $phenotypeRelatedStructureLabel"
-    val phenotypeLabel = s"$qualityLabel: $phenotypeStructureLabel$phenotypeSuffix"
+    val phenotypeLabel = s"$phenotypeStructureLabel $qualityLabel$phenotypeSuffix"
     val relatedEntityTerm = if (relatedSubStructureID == null) {
       if (relatedSuperStructureID != null) {
         Class(OBOUtil.iriForTermID(relatedSuperStructureID))
