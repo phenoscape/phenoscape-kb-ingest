@@ -34,21 +34,15 @@ object BgeeExpressionToOWL {
 
       val expression = OntUtil.nextIndividual()
       axioms.add(Declaration(expression))
-      axioms.add(expression Type GeneExpression)
 
       val structure = OntUtil.nextIndividual()
       axioms.add(Declaration(structure))
 
-      val term = (Option(StringUtils.stripToNull(items(2))).filter(_ != "\\").get)
-      if (term.startsWith("UBERON") || term.startsWith("CL")) {
+      val term = StringUtils.stripToNull(items(2))
+      if (term.startsWith("UBERON") || term.startsWith("CL") || term.startsWith("ZFA")) {
         val structureType = Class(OBOUtil.iriForTermID(Option(StringUtils.stripToNull(items(2))).filter(_ != "\\").get))
         axioms.add(structure Type structureType)
-      } else if (term.startsWith("ZFA")) {
-        val structureType = Class(IRI.create("http://zfin.org/" + Option(StringUtils.stripToNull(items(2))).filter(_ != "\\").get))
-        axioms.add(structure Type structureType)
-      } else {
-        println("Unprocessed term:");
-        println(term);
+        println(structure Type structureType)
       }
 
       val id = "http://identifiers.org/ensembl/" + StringUtils.stripToNull(items(0))
