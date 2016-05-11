@@ -25,7 +25,8 @@ object BgeeExpressionToOWL {
 
   def translate(expressionLine: String): Set[OWLAxiom] = {
     val items = expressionLine.split("\t", -1)
-    if (items(6).startsWith("absent") || items(6).startsWith("Expression")) {
+    //    println(items.length )
+    if (items.length == 1 || items(6).startsWith("absent") || items(6).startsWith("Expression")) {
       Set.empty
     } else {
       val axioms = mutable.Set.empty[OWLAxiom]
@@ -39,7 +40,10 @@ object BgeeExpressionToOWL {
       axioms.add(Declaration(structure))
 
       val term = StringUtils.stripToNull(items(2))
-      if (term.startsWith("UBERON") || term.startsWith("CL") || term.startsWith("ZFA")) {
+      if (term == null) {
+        println("null");
+
+      } else if (term.startsWith("UBERON") || term.startsWith("CL") || term.startsWith("ZFA")) {
         val structureType = Class(OBOUtil.iriForTermID(Option(StringUtils.stripToNull(items(2))).filter(_ != "\\").get))
         axioms.add(structure Type structureType)
         println(structure Type structureType)
@@ -54,4 +58,18 @@ object BgeeExpressionToOWL {
       axioms.toSet
     }
   }
+}
+
+object Main extends App {
+  println("done parsing")
+  val source = BgeeExpressionToOWL.strToSource("source_files/Danio_test.txt");
+  val test = BgeeExpressionToOWL.convert(source)
+
+  val file = new File("BgeeResult3.txt")
+  val bw = new BufferedWriter(new FileWriter(file))
+  bw.write(test.toString())
+  bw.close()
+
+  source.close();
+  println("done writing results")
 }
