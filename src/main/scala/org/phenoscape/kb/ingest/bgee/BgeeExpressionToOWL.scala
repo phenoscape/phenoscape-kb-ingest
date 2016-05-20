@@ -25,7 +25,6 @@ object BgeeExpressionToOWL {
 
   def translate(expressionLine: String): Set[OWLAxiom] = {
     val items = expressionLine.split("\t", -1)
-    //    println(items.length )
     if (items.length == 1 || items(6).startsWith("absent") || items(6).startsWith("Expression")) {
       Set.empty
     } else {
@@ -40,11 +39,14 @@ object BgeeExpressionToOWL {
       axioms.add(Declaration(structure))
 
       val term = StringUtils.stripToNull(items(2))
-      if (term == null) {
-        println("null");
-
-      } else if (term.startsWith("UBERON") || term.startsWith("CL") || term.startsWith("ZFA")) {
-        val structureType = Class(OBOUtil.iriForTermID(Option(StringUtils.stripToNull(items(2))).filter(_ != "\\").get))
+      var structureValid = false
+      try {
+        structureValid = (term.startsWith("UBERON") || term.startsWith("CL") || term.startsWith("ZFA"))
+      } catch {
+        case e: NullPointerException => System.err.println(e + " Empty structure in line: " + expressionLine)
+      }
+      if (structureValid) {
+        val structureType = Class(OBOUtil.iriForTermID(term))
         axioms.add(structure Type structureType)
         println(structure Type structureType)
       }
