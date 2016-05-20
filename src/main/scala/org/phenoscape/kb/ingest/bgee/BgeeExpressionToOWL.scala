@@ -25,7 +25,8 @@ object BgeeExpressionToOWL {
 
   def translate(expressionLine: String): Set[OWLAxiom] = {
     val items = expressionLine.split("\t", -1)
-    if (items.length == 1 || items(6).startsWith("absent") || items(6).startsWith("Expression")) {
+    
+    if (items.length == 1 || items(6).startsWith("absent") || items(6).startsWith("Expression") || items(2).startsWith("ZFA")) {
       Set.empty
     } else {
       val axioms = mutable.Set.empty[OWLAxiom]
