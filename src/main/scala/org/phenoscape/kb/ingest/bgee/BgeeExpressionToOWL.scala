@@ -26,6 +26,7 @@ object BgeeExpressionToOWL {
   def translate(expressionLine: String): Set[OWLAxiom] = {
     val items = expressionLine.split("\t", -1)
     
+    // skip ZFA terms as these are embryonic/pre-adult development stages different from the KB data 
     if (items.length == 1 || items(6).startsWith("absent") || items(6).startsWith("Expression") || items(2).startsWith("ZFA")) {
       Set.empty
     } else {
