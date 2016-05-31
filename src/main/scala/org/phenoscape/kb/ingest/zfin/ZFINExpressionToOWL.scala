@@ -39,9 +39,6 @@ object ZFINExpressionToOWL {
    * Prefix: uuid: <http://purl.org/phenoscape/uuid/>
    *
    *
-   * Individual: uuid:033ab9ee-e20a-4049-8780-24c422bb3c90
-   *     Types: ZFA:0000107 # eye
-   *
    * Individual: zfin:ZDB-GENE-000125-4 # dlc
    *
    * Individual: uuid:3e1ad895-56b2-4b54-a3f8-c99e7b42f646
@@ -49,7 +46,7 @@ object ZFINExpressionToOWL {
    *     Facts:
    *         ps:associated_with_taxon  NCBITaxon:7955, # Danio rerio
    *         dc:source                 zfin:ZDB-PUB-051025-1,
-   *         BFO:0000066               uuid:033ab9ee-e20a-4049-8780-24c422bb3c90, # occurs_in that eye
+   *         BFO:0000066               ZFA:0000107, # occurs_in eye (punned)
    *         ps:associated_with_gene   zfin:ZDB-GENE-000125-4 # dlc
    *
    * @return
@@ -67,30 +64,29 @@ object ZFINExpressionToOWL {
       // Individual: uuid:3e1ad895-56b2-4b54-a3f8-c99e7b42f646
       //     Types: GO:0010467
       axioms.add(expression Type GeneExpression)
-      val structure = OntUtil.nextIndividual()
-      // Individual: uuid:033ab9ee-e20a-4049-8780-24c422bb3c90
-      axioms.add(Declaration(structure))
-      // Individual: uuid:3e1ad895-56b2-4b54-a3f8-c99e7b42f646
-      //     Facts:
-      //         BFO:0000066 uuid:033ab9ee-e20a-4049-8780-24c422bb3c90
-      axioms.add(expression Fact (occurs_in, structure))
+
       val superStructureID = Option(StringUtils.stripToNull(items(3))).filter(_ != "\\").get
       val subStructureIDOpt = Option(StringUtils.stripToNull(items(5))).filter(_ != "\\")
-      subStructureIDOpt match {
+      val structureType = subStructureIDOpt match {
         case Some(subStructureID) => {
           val superStructure = Class(OBOUtil.iriForTermID(superStructureID))
           val subStructure = Class(OBOUtil.iriForTermID(subStructureID))
-          val (structureType, structureAxioms) = ExpressionUtil.nameForExpressionWithAxioms(subStructure and (part_of some superStructure))
-          axioms.add(structure Type structureType)
+          val (structureClass, structureAxioms) = ExpressionUtil.nameForExpressionWithAxioms(subStructure and (part_of some superStructure))
           axioms ++= structureAxioms
+          structureClass
         }
         case None => {
-          val structureType = Class(OBOUtil.iriForTermID(superStructureID))
-          // Individual: uuid:033ab9ee-e20a-4049-8780-24c422bb3c90
-          //     Types: ZFA:0000107
-          axioms.add(structure Type structureType)
+          Class(OBOUtil.iriForTermID(superStructureID))
+
         }
       }
+      val punnedStructure = Individual(structureType.getIRI)
+      axioms.add(Declaration(punnedStructure))
+      // Individual: uuid:3e1ad895-56b2-4b54-a3f8-c99e7b42f646
+      //     Facts:
+      //         BFO:0000066 ZFA:0000107
+      axioms.add(expression Fact (occurs_in, punnedStructure))
+
       val geneIRI = OBOUtil.zfinIRI(StringUtils.stripToNull(items(0)))
       val gene = Individual(geneIRI)
       val publicationID = StringUtils.stripToNull(items(10))

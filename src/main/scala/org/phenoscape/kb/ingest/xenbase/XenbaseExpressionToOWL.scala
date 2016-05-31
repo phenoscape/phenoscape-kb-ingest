@@ -59,10 +59,9 @@ object XenbaseExpressionToOWL {
       for (structureItem <- structureItems) {
         val structureID = StringUtils.stripToNull(structureItem.trim().split(" ")(0))
         val structureType = Class(OBOUtil.iriForTermID(structureID))
-        val structure = OntUtil.nextIndividual()
-        axioms.add(Declaration(structure))
-        axioms.add(structure Type structureType)
-        axioms.add(expression Fact (occurs_in, structure))
+        val punnedStructure = Individual(structureType.getIRI)
+        axioms.add(Declaration(punnedStructure))
+        axioms.add(expression Fact (occurs_in, punnedStructure))
       }
       val evidenceText = StringUtils.stripToEmpty(items(7))
       if (evidenceText.contains("XB-IMG")) {
