@@ -1,0 +1,2 @@
+Gene ID	"Gene name"	Anatomical entity ID	"Anatomical entity name"	Developmental stage ID	"Developmental stage name"	Expression	Call quality
+ENSDARG00000000001	"slc35a5"	UBERON:0000468	"multi-cellular organism"	UBERON:0000113	"post-juvenile adult stage"	present	poor quality
