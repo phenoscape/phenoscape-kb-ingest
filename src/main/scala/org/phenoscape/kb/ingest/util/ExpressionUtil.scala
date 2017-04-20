@@ -23,14 +23,13 @@ import org.semanticweb.owlapi.model.OWLQuantifiedObjectRestriction
 import org.semanticweb.owlapi.reasoner.OWLReasoner
 import org.semanticweb.owlapi.util.AnnotationValueShortFormProvider
 import org.semanticweb.owlapi.util.ShortFormProvider
-import uk.ac.manchester.cs.owl.owlapi.mansyntaxrenderer.ManchesterOWLSyntaxOWLObjectRendererImpl
-import uk.ac.manchester.cs.owl.owlapi.mansyntaxrenderer.ManchesterOWLSyntaxObjectRenderer
 import java.net.URLEncoder
 import java.net.URLDecoder
 import java.util.regex.Pattern
 import java.net.URL
 import java.net.URI
 import java.util.UUID
+import org.semanticweb.owlapi.manchestersyntax.renderer.ManchesterOWLSyntaxObjectRenderer
 
 object ExpressionUtil {
 
@@ -47,7 +46,6 @@ object ExpressionUtil {
     case _ => {
       val writer = new StringWriter()
       val renderer = new ManchesterOWLSyntaxObjectRenderer(writer, FullIRIProvider)
-      renderer.setUseWrapping(false)
       expression.accept(renderer: OWLClassExpressionVisitor)
       writer.close()
       val fragment = if (unique) s"#${UUID.randomUUID.toString}" else ""
