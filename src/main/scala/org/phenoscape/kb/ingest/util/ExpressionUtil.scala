@@ -39,7 +39,7 @@ object ExpressionUtil {
 
   def nameForExpression(expression: OWLClassExpression): OWLClass = name(expression, namedExpressionPrefix, false)
 
-  def nameForSubClassOf(expression: OWLClassExpression): OWLClass = name(expression, namedSubClassPrefix, false)
+  def nameForSubClassOf(expression: OWLClassExpression): OWLClass = name(expression, namedSubClassPrefix, true)
 
   private def name(expression: OWLClassExpression, prefix: String, unique: Boolean): OWLClass = expression match {
     case named: OWLClass => named
