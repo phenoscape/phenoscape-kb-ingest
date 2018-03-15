@@ -4,13 +4,11 @@ organization  := "org.phenoscape"
 
 name          := "phenoscape-kb-ingest"
 
-version       := "1.5.2"
+version       := "1.6"
 
-//mainClass in Compile := Some("org.phenoscape.Main")
+scalaVersion  := "2.12.4"
 
-scalaVersion  := "2.12.2"
-
-crossScalaVersions := Seq("2.11.8", "2.12.2")
+crossScalaVersions := Seq("2.11.8", "2.12.4")
 
 scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8")
 
