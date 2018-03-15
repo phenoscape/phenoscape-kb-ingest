@@ -4,7 +4,7 @@ organization  := "org.phenoscape"
 
 name          := "phenoscape-kb-ingest"
 
-version       := "1.6"
+version       := "1.6.1"
 
 scalaVersion  := "2.12.4"
 

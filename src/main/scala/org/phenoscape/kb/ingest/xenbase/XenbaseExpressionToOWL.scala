@@ -29,8 +29,7 @@ object XenbaseExpressionToOWL {
       val items = mapping.split("\t", -1)
       val genepageID = StringUtils.stripToNull(items(0))
       for {
-        geneIDOpt <- List(Option(StringUtils.stripToNull(items(2))), Option(StringUtils.stripToNull(items(4))), Option(StringUtils.stripToNull(items(6))))
-        geneID <- geneIDOpt
+        geneID <- items.drop(1).filter(_.startsWith("XB-GENE")).map(_.trim)
       } {
         index(StringUtils.stripToNull(geneID)) = genepageID
       }
@@ -77,4 +76,3 @@ object XenbaseExpressionToOWL {
   }
 
 }
-
