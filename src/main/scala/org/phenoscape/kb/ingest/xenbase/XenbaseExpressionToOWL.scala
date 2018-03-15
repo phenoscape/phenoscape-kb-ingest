@@ -1,16 +1,14 @@
 package org.phenoscape.kb.ingest.xenbase
 
-import scala.collection.JavaConversions._
 import scala.collection.Map
 import scala.collection.mutable
 import scala.io.Source
 
 import org.apache.commons.lang3.StringUtils
-import org.phenoscape.kb.ingest.util.Vocab
-import org.phenoscape.kb.ingest.util.Vocab._
 import org.phenoscape.kb.ingest.util.OBOUtil
 import org.phenoscape.kb.ingest.util.OntUtil
-import org.phenoscape.scowl.Functional._
+import org.phenoscape.kb.ingest.util.Vocab
+import org.phenoscape.kb.ingest.util.Vocab._
 import org.phenoscape.scowl._
 import org.semanticweb.owlapi.model.OWLAxiom
 import org.semanticweb.owlapi.model.OWLNamedIndividual
@@ -31,8 +29,8 @@ object XenbaseExpressionToOWL {
       val items = mapping.split("\t", -1)
       val genepageID = StringUtils.stripToNull(items(0))
       for {
-        geneIDs <- Option(StringUtils.stripToNull(items(1)))
-        geneID <- geneIDs.split(",")
+        geneIDOpt <- List(Option(StringUtils.stripToNull(items(2))), Option(StringUtils.stripToNull(items(4))), Option(StringUtils.stripToNull(items(6))))
+        geneID <- geneIDOpt
       } {
         index(StringUtils.stripToNull(geneID)) = genepageID
       }
@@ -79,3 +77,4 @@ object XenbaseExpressionToOWL {
   }
 
 }
+
