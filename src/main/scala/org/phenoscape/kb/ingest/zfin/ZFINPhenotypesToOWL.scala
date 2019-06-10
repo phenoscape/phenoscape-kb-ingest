@@ -1,19 +1,13 @@
 package org.phenoscape.kb.ingest.zfin
 
-import scala.collection.JavaConversions._
+import org.apache.commons.lang3.StringUtils
+import org.phenoscape.kb.ingest.util.{ExpressionUtil, OBOUtil, OntUtil}
+import org.phenoscape.kb.ingest.util.Vocab._
+import org.phenoscape.scowl._
+import org.semanticweb.owlapi.model.{IRI, OWLAxiom, OWLClass}
+
 import scala.collection.mutable
 import scala.io.Source
-
-import org.apache.commons.lang3.StringUtils
-import org.phenoscape.kb.ingest.util.Vocab._
-import org.phenoscape.kb.ingest.util.ExpressionUtil
-import org.phenoscape.kb.ingest.util.OBOUtil
-import org.phenoscape.kb.ingest.util.OntUtil
-import org.phenoscape.scowl.Functional._
-import org.phenoscape.scowl._
-import org.semanticweb.owlapi.model.IRI
-import org.semanticweb.owlapi.model.OWLAxiom
-import org.semanticweb.owlapi.model.OWLClass
 
 object ZFINPhenotypesToOWL {
 

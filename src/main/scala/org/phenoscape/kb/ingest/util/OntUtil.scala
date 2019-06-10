@@ -1,9 +1,9 @@
 package org.phenoscape.kb.ingest.util
 
 import java.util.UUID
-import org.semanticweb.owlapi.model.OWLNamedIndividual
-import org.semanticweb.owlapi.model.IRI
+
 import org.semanticweb.owlapi.apibinding.OWLManager
+import org.semanticweb.owlapi.model.{IRI, OWLNamedIndividual}
 
 object OntUtil {
 

@@ -1,19 +1,15 @@
 package org.phenoscape.kb.ingest.bgee
 
-import scala.collection.JavaConversions._
-import scala.collection.mutable
 import java.io._
-import scala.io.Source
-import org.phenoscape.scowl.Functional._
 
 import org.apache.commons.lang3.StringUtils
 import org.phenoscape.kb.ingest.util.Vocab._
-import org.phenoscape.kb.ingest.util.ExpressionUtil
-import org.phenoscape.kb.ingest.util.OBOUtil
-import org.phenoscape.kb.ingest.util.OntUtil
+import org.phenoscape.kb.ingest.util.{OBOUtil, OntUtil}
 import org.phenoscape.scowl._
-import org.semanticweb.owlapi.model.OWLAxiom
-import org.semanticweb.owlapi.model.IRI
+import org.semanticweb.owlapi.model.{IRI, OWLAxiom}
+
+import scala.collection.mutable
+import scala.io.Source
 
 object BgeeExpressionToOWL {
 

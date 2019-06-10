@@ -1,14 +1,9 @@
 package org.phenoscape.kb.ingest.util
 
-import org.semanticweb.owlapi.model.IRI
 import org.phenoscape.kb.ingest.mgi.MGIAnatomyBridgeToEMAPA
-import org.semanticweb.owlapi.model.OWLAnnotationAssertionAxiom
-import org.semanticweb.owlapi.model.OWLEntity
-import org.semanticweb.owlapi.apibinding.OWLManager
 import org.phenoscape.scowl._
-import org.semanticweb.owlapi.model.OWLClassExpression
-import org.semanticweb.owlapi.model.OWLClass
-import org.semanticweb.owlapi.model.OWLAxiom
+import org.semanticweb.owlapi.apibinding.OWLManager
+import org.semanticweb.owlapi.model._
 
 object OBOUtil {
 

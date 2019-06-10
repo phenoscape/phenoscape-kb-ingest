@@ -1,18 +1,13 @@
 package org.phenoscape.kb.ingest.mgi
 
-import java.io.File
-
-import scala.collection.JavaConversions._
-import scala.io.Source
-
 import org.apache.commons.lang3.StringUtils
 import org.phenoscape.kb.ingest.util.OBOUtil
-import org.phenoscape.scowl.Functional._
 import org.phenoscape.scowl._
 import org.semanticweb.owlapi.apibinding.OWLManager
-import org.semanticweb.owlapi.model.IRI
-import org.semanticweb.owlapi.model.OWLAxiom
-import org.semanticweb.owlapi.model.OWLOntology
+import org.semanticweb.owlapi.model.{IRI, OWLAxiom, OWLOntology}
+
+import scala.collection.JavaConverters._
+import scala.io.Source
 
 object MGIAnatomyBridgeToEMAPA {
 
@@ -21,7 +16,7 @@ object MGIAnatomyBridgeToEMAPA {
 
   def convert(mappings: Source): OWLOntology = {
     val axioms = mappings.getLines.map(translate(_)).flatten.toSet[OWLAxiom]
-    manager.createOntology(axioms, IRI.create(ontologyName))
+    manager.createOntology(axioms.asJava, IRI.create(ontologyName))
   }
 
   def translate(mapping: String): Set[OWLAxiom] = {

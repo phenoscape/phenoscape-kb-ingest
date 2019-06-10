@@ -1,18 +1,13 @@
 package org.phenoscape.kb.ingest.xenbase
 
+import org.apache.commons.lang3.StringUtils
+import org.phenoscape.kb.ingest.util.{ExpressionUtil, OBOUtil, OntUtil, Vocab}
+import org.phenoscape.kb.ingest.util.Vocab._
+import org.phenoscape.scowl._
+import org.semanticweb.owlapi.model.{OWLAxiom, OWLNamedIndividual}
+
 import scala.collection.Map
 import scala.io.Source
-
-import org.apache.commons.lang3.StringUtils
-import org.phenoscape.kb.ingest.util.Vocab
-import org.phenoscape.kb.ingest.util.Vocab._
-import org.phenoscape.kb.ingest.util.ExpressionUtil
-import org.phenoscape.kb.ingest.util.OBOUtil
-import org.phenoscape.kb.ingest.util.OntUtil
-import org.phenoscape.scowl.Functional._
-import org.phenoscape.scowl._
-import org.semanticweb.owlapi.model.OWLAxiom
-import org.semanticweb.owlapi.model.OWLNamedIndividual
 
 object XenbasePhenotypesToOWL {
 

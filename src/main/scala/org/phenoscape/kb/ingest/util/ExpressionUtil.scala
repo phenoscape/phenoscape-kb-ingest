@@ -1,35 +1,14 @@
 package org.phenoscape.kb.ingest.util
 
 import java.io.StringWriter
-import java.util.ArrayList
-import scala.collection.JavaConversions._
-import scala.collection.mutable
+import java.net.URLEncoder
+import java.util.UUID
+
 import org.phenoscape.scowl._
 import org.semanticweb.owlapi.apibinding.OWLManager
-import org.semanticweb.owlapi.model.OWLAnnotationProperty
-import org.semanticweb.owlapi.model.OWLAxiom
-import org.semanticweb.owlapi.model.OWLClass
-import org.semanticweb.owlapi.model.OWLClassExpression
-import org.semanticweb.owlapi.model.OWLClassExpressionVisitor
-import org.semanticweb.owlapi.model.OWLEntity
-import org.semanticweb.owlapi.model.OWLIndividual
-import org.semanticweb.owlapi.model.OWLLiteral
-import org.semanticweb.owlapi.model.OWLObject
-import org.semanticweb.owlapi.model.OWLObjectIntersectionOf
-import org.semanticweb.owlapi.model.OWLObjectSomeValuesFrom
-import org.semanticweb.owlapi.model.OWLOntology
-import org.semanticweb.owlapi.model.OWLOntologySetProvider
-import org.semanticweb.owlapi.model.OWLQuantifiedObjectRestriction
-import org.semanticweb.owlapi.reasoner.OWLReasoner
-import org.semanticweb.owlapi.util.AnnotationValueShortFormProvider
-import org.semanticweb.owlapi.util.ShortFormProvider
-import java.net.URLEncoder
-import java.net.URLDecoder
-import java.util.regex.Pattern
-import java.net.URL
-import java.net.URI
-import java.util.UUID
 import org.semanticweb.owlapi.manchestersyntax.renderer.ManchesterOWLSyntaxObjectRenderer
+import org.semanticweb.owlapi.model._
+import org.semanticweb.owlapi.util.ShortFormProvider
 
 object ExpressionUtil {
 
@@ -81,7 +60,7 @@ object ExpressionUtil {
 
     def getShortForm(entity: OWLEntity): String = s"<${entity.getIRI.toString}>"
 
-    def dispose(): Unit = Unit
+    def dispose(): Unit = ()
 
   }
 

@@ -1,16 +1,11 @@
 package org.phenoscape.kb.ingest.util
 
-import scala.annotation.migration
-import scala.collection.JavaConverters.setAsJavaSetConverter
-import scala.util.parsing.combinator.RegexParsers
-
-import org.apache.log4j.Logger 
+import org.apache.log4j.Logger
 import org.semanticweb.owlapi.apibinding.OWLManager
-import org.semanticweb.owlapi.model.IRI
-import org.semanticweb.owlapi.model.OWLClass
-import org.semanticweb.owlapi.model.OWLClassExpression
-import org.semanticweb.owlapi.model.OWLObjectProperty
-import org.semanticweb.owlapi.model.OWLObjectSomeValuesFrom
+import org.semanticweb.owlapi.model._
+
+import scala.collection.JavaConverters._
+import scala.util.parsing.combinator.RegexParsers
 
 object PostCompositionParser extends RegexParsers {
 
