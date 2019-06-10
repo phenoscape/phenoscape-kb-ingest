@@ -22,7 +22,7 @@ licenses := Seq("MIT license" -> url("https://opensource.org/licenses/MIT"))
 
 homepage := Some(url("https://github.com/phenoscape/phenoscape-kb-ingest"))
 
-scalaVersion  := "2.13.0"
+scalaVersion  := "2.11.12"
 
 crossScalaVersions := Seq("2.11.12", "2.12.8", "2.13.0")
 

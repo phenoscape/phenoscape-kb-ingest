@@ -17,8 +17,8 @@ object ZFINPhenotypesToOWL {
     val items = expressionLine.split("\t")
     val axioms = mutable.Set[OWLAxiom]()
     val phenotype = OntUtil.nextIndividual()
-    axioms.add(phenotype Type AnnotatedPhenotype)
-    axioms.add(Declaration(phenotype))
+    axioms += (phenotype Type AnnotatedPhenotype)
+    axioms += (Declaration(phenotype))
     val superStructureID = StringUtils.stripToNull(items(7))
     val superStructureLabel = StringUtils.stripToEmpty(items(8))
     val subStructureID = StringUtils.stripToNull(items(3))
@@ -31,7 +31,7 @@ object ZFINPhenotypesToOWL {
       val subStructure = Class(OBOUtil.iriForTermID(subStructureID))
       val relation = ObjectProperty(OBOUtil.iriForTermID(relationID))
       val (namedComposition, compositionAxioms) = ExpressionUtil.nameForExpressionWithAxioms(subStructure and (relation some superStructure))
-      axioms.addAll(compositionAxioms)
+      axioms ++= compositionAxioms
       namedComposition
     }
     val qualityTerm = Class(OBOUtil.iriForTermID(StringUtils.stripToNull(items(9))))
@@ -54,7 +54,7 @@ object ZFINPhenotypesToOWL {
       val relatedSubStructure = Class(OBOUtil.iriForTermID(relatedSubStructureID))
       val relatedRelation = ObjectProperty(OBOUtil.iriForTermID(relatedRelationID))
       val (namedComposition, compositionAxioms) = ExpressionUtil.nameForExpressionWithAxioms(relatedSubStructure and (relatedRelation some relatedSuperStructure))
-      axioms.addAll(compositionAxioms)
+      axioms ++= compositionAxioms
       namedComposition
     }
     val eq_phenotype = (entityTerm, qualityTerm, relatedEntityTerm) match {
@@ -71,10 +71,10 @@ object ZFINPhenotypesToOWL {
     if (eq_phenotype != null) {
       axioms.add(Declaration(MultiCellularOrganism))
       val (phenotypeClass, phenotypeAxioms) = ExpressionUtil.nameForExpressionWithAxioms(eq_phenotype)
-      axioms.add(Declaration(phenotypeClass))
-      axioms.add(phenotypeClass Annotation (rdfsLabel, phenotypeLabel))
-      axioms.addAll(phenotypeAxioms)
-      axioms.add(phenotype Type phenotypeClass)
+      axioms += Declaration(phenotypeClass)
+      axioms += (phenotypeClass Annotation (rdfsLabel, phenotypeLabel))
+      axioms ++= phenotypeAxioms
+      axioms += (phenotype Type phenotypeClass)
       val geneIRI = IRI.create("http://zfin.org/" + StringUtils.stripToNull(items(2)))
       val gene = Individual(geneIRI)
       axioms.add(Declaration(gene))
@@ -83,7 +83,7 @@ object ZFINPhenotypesToOWL {
     }
     val figureID = StringUtils.stripToNull(items(24))
     val figure = Individual(OBOUtil.zfinIRI(figureID))
-    axioms.add(phenotype Fact (dcSource, figure))
+    axioms += (phenotype Fact (dcSource, figure))
     axioms.toSet
   }
 
