@@ -24,7 +24,7 @@ homepage := Some(url("https://github.com/phenoscape/phenoscape-kb-ingest"))
 
 scalaVersion  := "2.13.0"
 
-crossScalaVersions := Seq("2.11.8", "2.12.8", "2.13.0")
+crossScalaVersions := Seq("2.11.12", "2.12.8", "2.13.0")
 
 scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8")
 
